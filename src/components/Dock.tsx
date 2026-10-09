@@ -8,7 +8,14 @@ import { stepZoom } from './Stage';
 import { Button, Segmented, cx } from './ui';
 
 /** Icon that grows as the pointer approaches (Aceternity "Floating Dock"), kept subtle. */
-function MagnifyIcon({ mouseX, label, pressed, disabled, onClick, children }: {
+function MagnifyIcon({
+  mouseX,
+  label,
+  pressed,
+  disabled,
+  onClick,
+  children
+}: {
   mouseX: MotionValue<number>;
   label: string;
   pressed?: boolean;
@@ -32,7 +39,10 @@ function MagnifyIcon({ mouseX, label, pressed, disabled, onClick, children }: {
       disabled={disabled}
       onClick={onClick}
       style={{ width: size, height: size }}
-      className={cx('grid shrink-0 place-items-center rounded-md disabled:opacity-35', pressed ? 'bg-ink text-paper' : 'hover:enabled:bg-panel')}
+      className={cx(
+        'grid shrink-0 place-items-center rounded-md disabled:opacity-35',
+        pressed ? 'bg-ink text-paper' : 'hover:enabled:bg-panel'
+      )}
     >
       {children}
     </motion.button>
@@ -52,9 +62,7 @@ export function Dock() {
 
   return (
     <>
-      <AnimatePresence>
-        {tool === 'crop' && <CropBar />}
-      </AnimatePresence>
+      <AnimatePresence>{tool === 'crop' && <CropBar />}</AnimatePresence>
       <div
         role="toolbar"
         aria-label="Ansicht und Werkzeuge"
@@ -76,18 +84,73 @@ export function Dock() {
         />
         <span className="mx-0.5 h-6 w-px shrink-0 bg-hair" />
         <div className="flex shrink-0 items-center gap-0.5">
-          <button type="button" aria-label="Verkleinern" title="Verkleinern (−)" disabled={!hasImage} onClick={() => stepZoom(-1)} className="grid size-8 max-[1180px]:hidden place-items-center rounded-md hover:enabled:bg-panel disabled:opacity-35"><Minus size={17} /></button>
-          <button type="button" title="100 % (1)" disabled={!hasImage} onClick={() => setView({ zoom: 100 })} className="h-8 min-w-14 rounded-md text-[12.5px] font-semibold tabular hover:enabled:bg-panel disabled:opacity-35 max-[1180px]:min-w-12 max-[520px]:hidden">{Math.round(zoom)}%</button>
-          <button type="button" aria-label="Vergrößern" title="Vergrößern (+)" disabled={!hasImage} onClick={() => stepZoom(1)} className="grid size-8 max-[1180px]:hidden place-items-center rounded-md hover:enabled:bg-panel disabled:opacity-35"><Plus size={17} /></button>
-          <button type="button" aria-label="Einpassen" title="Einpassen (F)" disabled={!hasImage} onClick={requestFit} className="grid size-8 place-items-center rounded-md hover:enabled:bg-panel disabled:opacity-35"><Maximize size={16} /></button>
+          <button
+            type="button"
+            aria-label="Verkleinern"
+            title="Verkleinern (−)"
+            disabled={!hasImage}
+            onClick={() => stepZoom(-1)}
+            className="grid size-8 max-[1180px]:hidden place-items-center rounded-md hover:enabled:bg-panel disabled:opacity-35"
+          >
+            <Minus size={17} />
+          </button>
+          <button
+            type="button"
+            title="100 % (1)"
+            disabled={!hasImage}
+            onClick={() => setView({ zoom: 100 })}
+            className="h-8 min-w-14 rounded-md text-[12.5px] font-semibold tabular hover:enabled:bg-panel disabled:opacity-35 max-[1180px]:min-w-12 max-[520px]:hidden"
+          >
+            {Math.round(zoom)}%
+          </button>
+          <button
+            type="button"
+            aria-label="Vergrößern"
+            title="Vergrößern (+)"
+            disabled={!hasImage}
+            onClick={() => stepZoom(1)}
+            className="grid size-8 max-[1180px]:hidden place-items-center rounded-md hover:enabled:bg-panel disabled:opacity-35"
+          >
+            <Plus size={17} />
+          </button>
+          <button
+            type="button"
+            aria-label="Einpassen"
+            title="Einpassen (F)"
+            disabled={!hasImage}
+            onClick={requestFit}
+            className="grid size-8 place-items-center rounded-md hover:enabled:bg-panel disabled:opacity-35"
+          >
+            <Maximize size={16} />
+          </button>
         </div>
         <span className="mx-0.5 h-6 w-px shrink-0 bg-hair" />
         <div className="flex shrink-0 items-center gap-0.5">
-          <MagnifyIcon mouseX={mouseX} label="Zuschneiden (C)" pressed={tool === 'crop'} disabled={!hasImage} onClick={() => toggleTool('crop')}><Crop size={17} /></MagnifyIcon>
-          <MagnifyIcon mouseX={mouseX} label="Radierer (E)" pressed={tool === 'eraser'} disabled={!hasImage} onClick={() => toggleTool('eraser')}><Eraser size={17} /></MagnifyIcon>
-          <MagnifyIcon mouseX={mouseX} label="Maske anzeigen (M)" pressed={maskPreview} disabled={!hasImage} onClick={toggleMask}><CircleDot size={17} /></MagnifyIcon>
+          <MagnifyIcon
+            mouseX={mouseX}
+            label="Zuschneiden (C)"
+            pressed={tool === 'crop'}
+            disabled={!hasImage}
+            onClick={() => toggleTool('crop')}
+          >
+            <Crop size={17} />
+          </MagnifyIcon>
+          <MagnifyIcon
+            mouseX={mouseX}
+            label="Radierer (E)"
+            pressed={tool === 'eraser'}
+            disabled={!hasImage}
+            onClick={() => toggleTool('eraser')}
+          >
+            <Eraser size={17} />
+          </MagnifyIcon>
+          <MagnifyIcon mouseX={mouseX} label="Maske anzeigen (M)" pressed={maskPreview} disabled={!hasImage} onClick={toggleMask}>
+            <CircleDot size={17} />
+          </MagnifyIcon>
           <span className="max-[1180px]:hidden">
-            <MagnifyIcon mouseX={mouseX} label="Tastenkürzel (?)" onClick={() => set({ shortcutsOpen: true })}><Keyboard size={17} /></MagnifyIcon>
+            <MagnifyIcon mouseX={mouseX} label="Tastenkürzel (?)" onClick={() => set({ shortcutsOpen: true })}>
+              <Keyboard size={17} />
+            </MagnifyIcon>
           </span>
         </div>
       </div>
@@ -116,8 +179,12 @@ function CropBar() {
         onChange={(v) => set({ cropAspect: v })}
         options={CROP_ASPECTS.map((a) => ({ value: a.value, label: a.label }))}
       />
-      <Button variant="mini" className="!w-auto" onClick={() => setTool('none')}>Abbrechen</Button>
-      <Button variant="mini" className="!w-auto !border-ink !bg-ink !text-paper" onClick={applyCrop}>Zuschneiden</Button>
+      <Button variant="mini" className="!w-auto" onClick={() => setTool('none')}>
+        Abbrechen
+      </Button>
+      <Button variant="mini" className="!w-auto !border-ink !bg-ink !text-paper" onClick={applyCrop}>
+        Zuschneiden
+      </Button>
     </motion.div>
   );
 }

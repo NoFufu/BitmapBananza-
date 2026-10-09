@@ -3,7 +3,19 @@ import { ChevronDown } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useStudio } from '../state/store';
 
-export function Section({ id, title, subtitle, changed, children }: { id: string; title: string; subtitle?: string; changed?: boolean; children: ReactNode }) {
+export function Section({
+  id,
+  title,
+  subtitle,
+  changed,
+  children
+}: {
+  id: string;
+  title: string;
+  subtitle?: string;
+  changed?: boolean;
+  children: ReactNode;
+}) {
   const open = useStudio((s) => Boolean(s.openSections[id]));
   const toggle = useStudio((s) => s.toggleSection);
   return (

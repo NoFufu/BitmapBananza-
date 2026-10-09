@@ -11,8 +11,14 @@ const SIZE = 220;
 
 // Before an image is loaded each look previews one of the sample photos.
 const LOOK_PHOTO: Record<string, number> = {
-  cleanPhoto: 0, hardPoster: 3, highDetailInk: 1, softNewspaper: 2,
-  dirtyXerox: 0, shirtPrintGraphic: 1, logoCleanup: 3, pixelClassic: 2
+  cleanPhoto: 0,
+  hardPoster: 3,
+  highDetailInk: 1,
+  softNewspaper: 2,
+  dirtyXerox: 0,
+  shirtPrintGraphic: 1,
+  logoCleanup: 3,
+  pixelClassic: 2
 };
 
 /** Square crop, biased slightly upwards because portraits keep faces above centre. */
@@ -41,7 +47,11 @@ function drawLook(target: HTMLCanvasElement, id: string, source: CanvasSource, p
 const LOOK_STORAGE = 'levisGraphicLabCustomPresetsV1';
 type SavedLooks = Record<string, Record<string, unknown>>;
 function readLooks(): SavedLooks {
-  try { return JSON.parse(localStorage.getItem(LOOK_STORAGE) || '{}') || {}; } catch { return {}; }
+  try {
+    return JSON.parse(localStorage.getItem(LOOK_STORAGE) || '{}') || {};
+  } catch {
+    return {};
+  }
 }
 
 /** Your own looks live right under the built-in ones: save the current settings, load or delete them. */
@@ -54,11 +64,18 @@ function CustomLooks() {
 
   const write = (next: SavedLooks) => {
     setLooks(next);
-    try { localStorage.setItem(LOOK_STORAGE, JSON.stringify(next)); } catch { notify('Speichern ist in diesem Browser blockiert.'); }
+    try {
+      localStorage.setItem(LOOK_STORAGE, JSON.stringify(next));
+    } catch {
+      notify('Speichern ist in diesem Browser blockiert.');
+    }
   };
   const save = () => {
     const n = name.trim();
-    if (!n) { notify('Gib deinem Look einen Namen.'); return; }
+    if (!n) {
+      notify('Gib deinem Look einen Namen.');
+      return;
+    }
     write({ ...looks, [n]: { ...useStudio.getState().controls } });
     notify(`Look „${n}“ gespeichert.`);
     setName('');
@@ -70,28 +87,62 @@ function CustomLooks() {
       <div className="flex flex-wrap items-center gap-1.5">
         {Object.keys(looks).map((n) => (
           <span key={n} className="inline-flex h-7 items-center rounded-full border border-hair bg-paper text-[12px] hover:border-ink">
-            <button type="button" className="h-full pr-1 pl-2.5 font-semibold" onClick={() => { setControls(controlsFromPreset(looks[n])); notify(`Look „${n}“ geladen.`); }}>{n}</button>
+            <button
+              type="button"
+              className="h-full pr-1 pl-2.5 font-semibold"
+              onClick={() => {
+                setControls(controlsFromPreset(looks[n]));
+                notify(`Look „${n}“ geladen.`);
+              }}
+            >
+              {n}
+            </button>
             <button
               type="button"
               aria-label={`${n} löschen`}
               title="Löschen"
               className="mr-1 grid size-5 place-items-center rounded-full text-muted hover:bg-panel-deep hover:text-ink"
-              onClick={() => { const next = { ...looks }; delete next[n]; write(next); }}
+              onClick={() => {
+                const next = { ...looks };
+                delete next[n];
+                write(next);
+              }}
             >
               <X size={12} />
             </button>
           </span>
         ))}
         {!naming && (
-          <button type="button" onClick={() => setNaming(true)} className="inline-flex h-7 items-center gap-1 rounded-full border border-dashed border-line px-2.5 text-[12px] text-muted hover:border-ink hover:text-ink">
+          <button
+            type="button"
+            onClick={() => setNaming(true)}
+            className="inline-flex h-7 items-center gap-1 rounded-full border border-dashed border-line px-2.5 text-[12px] text-muted hover:border-ink hover:text-ink"
+          >
             <Plus size={13} /> Eigenen Look speichern
           </button>
         )}
       </div>
       {naming && (
-        <form className="mt-2 flex gap-1.5" onSubmit={(e) => { e.preventDefault(); save(); }}>
-          <input autoFocus className="field !h-8" placeholder="Name, z. B. Shirt Heavy Ink" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Escape') setNaming(false); }} />
-          <button type="submit" className="h-8 shrink-0 rounded-md bg-ink px-3 text-[12.5px] font-semibold text-paper">Speichern</button>
+        <form
+          className="mt-2 flex gap-1.5"
+          onSubmit={(e) => {
+            e.preventDefault();
+            save();
+          }}
+        >
+          <input
+            autoFocus
+            className="field !h-8"
+            placeholder="Name, z. B. Shirt Heavy Ink"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') setNaming(false);
+            }}
+          />
+          <button type="submit" className="h-8 shrink-0 rounded-md bg-ink px-3 text-[12.5px] font-semibold text-paper">
+            Speichern
+          </button>
         </form>
       )}
     </div>
@@ -114,7 +165,11 @@ export function LooksPanel() {
         const target = canvases.current[i++];
         const source = sourceFor(look.id);
         if (target && source) {
-          try { drawLook(target, look.id, source, pixelScale); } catch (error) { console.warn('Look thumbnail failed', look.id, error); }
+          try {
+            drawLook(target, look.id, source, pixelScale);
+          } catch (error) {
+            console.warn('Look thumbnail failed', look.id, error);
+          }
         }
         window.setTimeout(next, 16);
       };
@@ -125,36 +180,56 @@ export function LooksPanel() {
       const source = squareSource(preview, 0.5);
       run(() => source, Math.max(SIZE / preview.width, SIZE / preview.height));
     } else {
-      Promise.all(SAMPLE_PHOTOS.map(loadPhoto)).then((photos) => {
-        if (cancelled) return;
-        const sources = photos.map((p) => squareSource(p));
-        // Sample photos are about 1000 px; scale pixel blocks the same way.
-        run((id) => sources[LOOK_PHOTO[id] ?? 0], SIZE / 1000);
-      }).catch(() => { /* thumbnails stay blank */ });
+      Promise.all(SAMPLE_PHOTOS.map(loadPhoto))
+        .then((photos) => {
+          if (cancelled) return;
+          const sources = photos.map((p) => squareSource(p));
+          // Sample photos are about 1000 px; scale pixel blocks the same way.
+          run((id) => sources[LOOK_PHOTO[id] ?? 0], SIZE / 1000);
+        })
+        .catch(() => {
+          /* thumbnails stay blank */
+        });
     }
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [preview]);
 
   return (
     <section aria-labelledby="looks-title" className="border-b border-hair px-3.5 pt-3 pb-3.5">
       <div className="mb-2.5 flex items-baseline justify-between gap-2">
-        <h2 id="looks-title" className="text-[15px] font-extrabold font-compact">Looks</h2>
+        <h2 id="looks-title" className="text-[15px] font-extrabold font-compact">
+          Looks
+        </h2>
         <span className="text-[11.5px] text-muted">{preview ? 'mit deinem Bild' : 'Ein Klick setzt alle Regler'}</span>
       </div>
       <div className="grid grid-cols-2 gap-x-2 gap-y-2.5 max-[900px]:grid-cols-4 max-[520px]:grid-cols-3">
         {LOOKS.map((look, i) => {
           const active = activeLook === look.id;
           return (
-            <button key={look.id} type="button" aria-pressed={active} onClick={() => applyLook(look.id)} className="group grid gap-px text-left">
+            <button
+              key={look.id}
+              type="button"
+              aria-pressed={active}
+              onClick={() => applyLook(look.id)}
+              className="group grid gap-px text-left"
+            >
               <span className="relative mb-1 block">
                 <canvas
-                  ref={(el) => { canvases.current[i] = el; }}
+                  ref={(el) => {
+                    canvases.current[i] = el;
+                  }}
                   width={SIZE}
                   height={SIZE}
                   className="block aspect-square h-auto w-full rounded-[3px] border border-hair bg-paper transition-colors group-hover:border-ink"
                 />
                 {active && (
-                  <motion.span layoutId="look-active" className="pointer-events-none absolute -inset-[3px] rounded-[5px] border-2 border-ink" transition={{ type: 'spring', stiffness: 480, damping: 36 }} />
+                  <motion.span
+                    layoutId="look-active"
+                    className="pointer-events-none absolute -inset-[3px] rounded-[5px] border-2 border-ink"
+                    transition={{ type: 'spring', stiffness: 480, damping: 36 }}
+                  />
                 )}
               </span>
               <span className={cx('text-[12.5px] leading-tight font-bold', active && 'underline underline-offset-2')}>{look.name}</span>

@@ -10,7 +10,7 @@ const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigat
 export const MOD = isMac ? '⌘' : 'Strg';
 
 /** Export button that shows its own progress and success. */
-export function ExportButton() {
+function ExportButton() {
   const hasImage = useStudio((s) => Boolean(s.image && s.renderVersion));
   const [state, setState] = useState<'idle' | 'busy' | 'done'>('idle');
   const run = async () => {
@@ -26,11 +26,30 @@ export function ExportButton() {
       setState('idle');
     }
   };
-  const icon = state === 'busy' ? <LoaderCircle size={16} className="animate-spin" /> : state === 'done' ? <Check size={16} /> : <Download size={16} />;
+  const icon =
+    state === 'busy' ? (
+      <LoaderCircle size={16} className="animate-spin" />
+    ) : state === 'done' ? (
+      <Check size={16} />
+    ) : (
+      <Download size={16} />
+    );
   return (
-    <Button variant="ink" disabled={!hasImage || state === 'busy'} onClick={run} title={`PNG exportieren (${MOD}+S)`} className="max-[900px]:w-10 max-[900px]:px-0">
+    <Button
+      variant="ink"
+      disabled={!hasImage || state === 'busy'}
+      onClick={run}
+      title={`PNG exportieren (${MOD}+S)`}
+      className="max-[900px]:w-10 max-[900px]:px-0"
+    >
       <AnimatePresence mode="wait" initial={false}>
-        <motion.span key={state} initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.6 }} transition={{ duration: 0.12 }}>
+        <motion.span
+          key={state}
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.6 }}
+          transition={{ duration: 0.12 }}
+        >
           {icon}
         </motion.span>
       </AnimatePresence>
@@ -66,15 +85,23 @@ export function TopBar() {
 
       {image && (
         <div className="flex min-w-0 items-baseline gap-2 border-l border-hair pl-4 text-muted max-[900px]:hidden">
-          <span className="max-w-[28ch] truncate font-semibold text-ink" title={image.name}>{image.name}</span>
-          <span className="whitespace-nowrap tabular max-[1180px]:hidden">{image.working.width} × {image.working.height} px</span>
+          <span className="max-w-[28ch] truncate font-semibold text-ink" title={image.name}>
+            {image.name}
+          </span>
+          <span className="whitespace-nowrap tabular max-[1180px]:hidden">
+            {image.working.width} × {image.working.height} px
+          </span>
         </div>
       )}
 
       <div className="ml-auto flex items-center gap-2">
         <div className="flex max-[900px]:hidden" role="group" aria-label="Verlauf">
-          <IconButton label={`Rückgängig (${MOD}+Z)`} className="rounded-l-md" disabled={!canUndo} onClick={undo}><Undo2 size={17} /></IconButton>
-          <IconButton label={`Wiederholen (${MOD}+⇧+Z)`} className="-ml-px rounded-r-md" disabled={!canRedo} onClick={redo}><Redo2 size={17} /></IconButton>
+          <IconButton label={`Rückgängig (${MOD}+Z)`} className="rounded-l-md" disabled={!canUndo} onClick={undo}>
+            <Undo2 size={17} />
+          </IconButton>
+          <IconButton label={`Wiederholen (${MOD}+⇧+Z)`} className="-ml-px rounded-r-md" disabled={!canRedo} onClick={redo}>
+            <Redo2 size={17} />
+          </IconButton>
         </div>
         <button
           type="button"
@@ -88,7 +115,8 @@ export function TopBar() {
           <kbd className="max-[1180px]:!hidden">{MOD} K</kbd>
         </button>
         <Button variant="quiet" onClick={pickFiles} title={`Bild öffnen (${MOD}+O)`} className="max-[900px]:w-10 max-[900px]:px-0">
-          <Upload size={16} /><span className="max-[900px]:hidden">Bild öffnen</span>
+          <Upload size={16} />
+          <span className="max-[900px]:hidden">Bild öffnen</span>
         </Button>
         <ExportButton />
       </div>

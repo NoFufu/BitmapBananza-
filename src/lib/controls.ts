@@ -3,39 +3,126 @@
 
 export type SectionId = 'basics' | 'structure' | 'wear' | 'edge' | 'cleanup' | 'pro' | 'output';
 
-export interface Option { value: string; label: string; group?: string }
+export interface Option {
+  value: string;
+  label: string;
+  group?: string;
+}
 
-interface Base { key: string; label: string; section: SectionId; sub?: string; hint?: string; showIf?: (c: Controls) => boolean }
-export interface SliderDef extends Base { kind: 'slider'; min: number; max: number; step?: number; unit?: string; tone?: boolean }
-export interface SelectDef extends Base { kind: 'select'; options: Option[] }
-export interface ToggleDef extends Base { kind: 'toggle' }
+interface Base {
+  key: string;
+  label: string;
+  section: SectionId;
+  sub?: string;
+  hint?: string;
+  showIf?: (c: Controls) => boolean;
+}
+export interface SliderDef extends Base {
+  kind: 'slider';
+  min: number;
+  max: number;
+  step?: number;
+  unit?: string;
+  tone?: boolean;
+}
+export interface SelectDef extends Base {
+  kind: 'select';
+  options: Option[];
+}
+export interface ToggleDef extends Base {
+  kind: 'toggle';
+}
 export type ControlDef = SliderDef | SelectDef | ToggleDef;
 
 export type Controls = {
-  graphicMode: string; thresholdMode: string; pixelSize: number; threshold: number; contrast: number; gamma: number;
-  ditherStrength: number; noiseScale: number; method: string;
-  blackAmount: number; whiteCleanup: number; midtonePush: number; shadowDetail: number; highlightDetail: number;
-  edgeStrength: number; smoothness: number; sharpen: number; preBlur: number; adaptiveStrength: number; detailPreserve: number;
-  halftoneMode: string; halftoneSize: number; halftoneStrength: number; halftoneAngle: number; halftoneGain: number; halftoneJitter: number;
-  edgeRoughness: number; inkBleed: number; dustAmount: number; grainAmount: number;
-  edgeFadeMode: string; edgeFadeWidth: number; edgeFadeStrength: number; edgeFadeNoise: number;
-  removeSpeckles: number; fillHoles: number; expandBlack: number; shrinkBlack: number; smoothJagged: number;
-  invert: boolean; transparent: boolean;
+  graphicMode: string;
+  thresholdMode: string;
+  pixelSize: number;
+  threshold: number;
+  contrast: number;
+  gamma: number;
+  ditherStrength: number;
+  noiseScale: number;
+  method: string;
+  blackAmount: number;
+  whiteCleanup: number;
+  midtonePush: number;
+  shadowDetail: number;
+  highlightDetail: number;
+  edgeStrength: number;
+  smoothness: number;
+  sharpen: number;
+  preBlur: number;
+  adaptiveStrength: number;
+  detailPreserve: number;
+  halftoneMode: string;
+  halftoneSize: number;
+  halftoneStrength: number;
+  halftoneAngle: number;
+  halftoneGain: number;
+  halftoneJitter: number;
+  edgeRoughness: number;
+  inkBleed: number;
+  dustAmount: number;
+  grainAmount: number;
+  edgeFadeMode: string;
+  edgeFadeWidth: number;
+  edgeFadeStrength: number;
+  edgeFadeNoise: number;
+  removeSpeckles: number;
+  fillHoles: number;
+  expandBlack: number;
+  shrinkBlack: number;
+  smoothJagged: number;
+  invert: boolean;
+  transparent: boolean;
 };
 
 export type ControlKey = keyof Controls;
 
 // Same defaults as the HTML inputs of the original tool.
 export const DEFAULT_CONTROLS: Controls = {
-  graphicMode: 'fullDetail', thresholdMode: 'global', pixelSize: 8, threshold: 128, contrast: 0, gamma: 100,
-  ditherStrength: 100, noiseScale: 100, method: 'threshold',
-  blackAmount: 50, whiteCleanup: 20, midtonePush: 0, shadowDetail: 35, highlightDetail: 30,
-  edgeStrength: 35, smoothness: 10, sharpen: 20, preBlur: 0, adaptiveStrength: 55, detailPreserve: 45,
-  halftoneMode: 'off', halftoneSize: 10, halftoneStrength: 100, halftoneAngle: 15, halftoneGain: 0, halftoneJitter: 0,
-  edgeRoughness: 0, inkBleed: 0, dustAmount: 0, grainAmount: 0,
-  edgeFadeMode: 'off', edgeFadeWidth: 18, edgeFadeStrength: 70, edgeFadeNoise: 35,
-  removeSpeckles: 0, fillHoles: 0, expandBlack: 0, shrinkBlack: 0, smoothJagged: 0,
-  invert: false, transparent: false
+  graphicMode: 'fullDetail',
+  thresholdMode: 'global',
+  pixelSize: 8,
+  threshold: 128,
+  contrast: 0,
+  gamma: 100,
+  ditherStrength: 100,
+  noiseScale: 100,
+  method: 'threshold',
+  blackAmount: 50,
+  whiteCleanup: 20,
+  midtonePush: 0,
+  shadowDetail: 35,
+  highlightDetail: 30,
+  edgeStrength: 35,
+  smoothness: 10,
+  sharpen: 20,
+  preBlur: 0,
+  adaptiveStrength: 55,
+  detailPreserve: 45,
+  halftoneMode: 'off',
+  halftoneSize: 10,
+  halftoneStrength: 100,
+  halftoneAngle: 15,
+  halftoneGain: 0,
+  halftoneJitter: 0,
+  edgeRoughness: 0,
+  inkBleed: 0,
+  dustAmount: 0,
+  grainAmount: 0,
+  edgeFadeMode: 'off',
+  edgeFadeWidth: 18,
+  edgeFadeStrength: 70,
+  edgeFadeNoise: 35,
+  removeSpeckles: 0,
+  fillHoles: 0,
+  expandBlack: 0,
+  shrinkBlack: 0,
+  smoothJagged: 0,
+  invert: false,
+  transparent: false
 };
 
 // The original setControlsFromPreset() fallbacks for keys a look leaves out.
@@ -56,7 +143,12 @@ export const SECTIONS: { id: SectionId; title: string; subtitle: string; hint?: 
   { id: 'wear', title: 'Druck-Look', subtitle: 'Abnutzung wie Siebdruck oder Kopierer' },
   { id: 'edge', title: 'Rand und Shirt', subtitle: 'Bildrand ausblenden, radieren' },
   { id: 'cleanup', title: 'Aufräumen', subtitle: 'Flecken, Löcher und Linienstärke', hint: 'Hilft vor allem bei Logos und Scans.' },
-  { id: 'pro', title: 'Profi-Einstellungen', subtitle: 'Feinsteuerung der Umwandlung', hint: 'Die Looks setzen diese Werte schon passend. Ändere sie nur, wenn Grundlagen nicht reichen.' }
+  {
+    id: 'pro',
+    title: 'Profi-Einstellungen',
+    subtitle: 'Feinsteuerung der Umwandlung',
+    hint: 'Die Looks setzen diese Werte schon passend. Ändere sie nur, wenn Grundlagen nicht reichen.'
+  }
 ];
 
 export type Structure = 'flat' | 'dither' | 'halftone' | 'pixel';
@@ -74,7 +166,13 @@ export function withStructure(c: Controls, structure: Structure): Controls {
   if (structure === 'pixel') return { ...c, graphicMode: 'pixelBitmap' };
   if (structure === 'halftone') return { ...c, graphicMode: base, halftoneMode: c.halftoneMode === 'off' ? 'dotRound' : c.halftoneMode };
   if (structure === 'dither') {
-    return { ...c, graphicMode: base, halftoneMode: 'off', method: c.method === 'threshold' ? 'floyd' : c.method, ditherStrength: c.ditherStrength > 0 ? c.ditherStrength : 100 };
+    return {
+      ...c,
+      graphicMode: base,
+      halftoneMode: 'off',
+      method: c.method === 'threshold' ? 'floyd' : c.method,
+      ditherStrength: c.ditherStrength > 0 ? c.ditherStrength : 100
+    };
   }
   return { ...c, graphicMode: base, halftoneMode: 'off', method: 'threshold' };
 }
@@ -87,7 +185,17 @@ export const STRUCTURES: { value: Structure; label: string; hint: string }[] = [
 ];
 
 // Dither methods that use the scale slider; the others ignore it.
-const SCALED_METHODS = new Set(['randomChunky', 'noise', 'blueNoise', 'organicWorm', 'maze', 'clusterDot', 'hatchH', 'hatchV', 'hatchDiag']);
+const SCALED_METHODS = new Set([
+  'randomChunky',
+  'noise',
+  'blueNoise',
+  'organicWorm',
+  'maze',
+  'clusterDot',
+  'hatchH',
+  'hatchV',
+  'hatchDiag'
+]);
 const notPixel = (c: Controls) => c.graphicMode !== 'pixelBitmap';
 const isDither = (c: Controls) => {
   const st = getStructure(c);
@@ -126,36 +234,141 @@ const methodOptions: Option[] = [
 const opts = (pairs: [string, string][]): Option[] => pairs.map(([value, label]) => ({ value, label }));
 
 export const CONTROL_DEFS: ControlDef[] = [
-  { kind: 'slider', key: 'threshold', label: 'Schwelle', section: 'basics', min: 0, max: 255, tone: true, showIf: (c) => c.thresholdMode !== 'auto' },
+  {
+    kind: 'slider',
+    key: 'threshold',
+    label: 'Schwelle',
+    section: 'basics',
+    min: 0,
+    max: 255,
+    tone: true,
+    showIf: (c) => c.thresholdMode !== 'auto'
+  },
   { kind: 'slider', key: 'blackAmount', label: 'Schwarzanteil', section: 'basics', min: 0, max: 100, showIf: notPixel },
   { kind: 'slider', key: 'contrast', label: 'Kontrast', section: 'basics', min: -100, max: 100 },
   { kind: 'slider', key: 'detailPreserve', label: 'Details', section: 'basics', min: 0, max: 100, showIf: notPixel },
   { kind: 'slider', key: 'smoothness', label: 'Glätten', section: 'basics', min: 0, max: 100, showIf: notPixel },
 
   { kind: 'select', key: 'method', label: 'Dither-Art', section: 'structure', options: methodOptions, showIf: isDither },
-  { kind: 'slider', key: 'ditherStrength', label: 'Dither-Stärke', section: 'structure', min: 0, max: 250, showIf: (c) => isDither(c) && c.method !== 'threshold' },
-  { kind: 'slider', key: 'noiseScale', label: 'Körnigkeit', section: 'structure', min: 20, max: 300, showIf: (c) => isDither(c) && SCALED_METHODS.has(c.method) },
-  { kind: 'select', key: 'halftoneMode', label: 'Rasterform', section: 'structure', options: opts([
-    ['off', 'Aus'], ['dotRound', 'Round Dots'], ['dotTiny', 'Tiny Newspaper Dots'], ['dotBig', 'Big Print Dots'], ['ellipse', 'Ellipse Dots'],
-    ['line', 'Line Screen'], ['verticalLine', 'Vertical Lines'], ['diagonalLine', 'Diagonal Lines'], ['cross', 'Cross Hatch'], ['wave', 'Wave Lines'],
-    ['square', 'Square Dots'], ['diamond', 'Diamond Dots'], ['ring', 'Ring Dots'], ['concentric', 'Concentric Rings'], ['plus', 'Plus Marks'],
-    ['brick', 'Brick Pattern'], ['star', 'Star Dots']
-  ]), showIf: (c) => getStructure(c) === 'halftone' || (getStructure(c) === 'pixel' && c.halftoneMode !== 'off') },
-  { kind: 'slider', key: 'halftoneSize', label: 'Rastergröße', section: 'structure', min: 3, max: 50, showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone' },
-  { kind: 'slider', key: 'halftoneAngle', label: 'Winkel', section: 'structure', min: 0, max: 180, unit: '°', showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone' },
-  { kind: 'slider', key: 'halftoneGain', label: 'Punkte dicker / dünner', section: 'structure', min: -50, max: 100, showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone' },
-  { kind: 'slider', key: 'halftoneJitter', label: 'Unruhe', section: 'structure', min: 0, max: 100, showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone' },
-  { kind: 'slider', key: 'halftoneStrength', label: 'Rasteranteil', section: 'structure', min: 0, max: 100, showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone' },
-  { kind: 'slider', key: 'pixelSize', label: 'Pixelgröße', section: 'structure', min: 1, max: 40, showIf: (c) => c.graphicMode === 'pixelBitmap' },
+  {
+    kind: 'slider',
+    key: 'ditherStrength',
+    label: 'Dither-Stärke',
+    section: 'structure',
+    min: 0,
+    max: 250,
+    showIf: (c) => isDither(c) && c.method !== 'threshold'
+  },
+  {
+    kind: 'slider',
+    key: 'noiseScale',
+    label: 'Körnigkeit',
+    section: 'structure',
+    min: 20,
+    max: 300,
+    showIf: (c) => isDither(c) && SCALED_METHODS.has(c.method)
+  },
+  {
+    kind: 'select',
+    key: 'halftoneMode',
+    label: 'Rasterform',
+    section: 'structure',
+    options: opts([
+      ['off', 'Aus'],
+      ['dotRound', 'Round Dots'],
+      ['dotTiny', 'Tiny Newspaper Dots'],
+      ['dotBig', 'Big Print Dots'],
+      ['ellipse', 'Ellipse Dots'],
+      ['line', 'Line Screen'],
+      ['verticalLine', 'Vertical Lines'],
+      ['diagonalLine', 'Diagonal Lines'],
+      ['cross', 'Cross Hatch'],
+      ['wave', 'Wave Lines'],
+      ['square', 'Square Dots'],
+      ['diamond', 'Diamond Dots'],
+      ['ring', 'Ring Dots'],
+      ['concentric', 'Concentric Rings'],
+      ['plus', 'Plus Marks'],
+      ['brick', 'Brick Pattern'],
+      ['star', 'Star Dots']
+    ]),
+    showIf: (c) => getStructure(c) === 'halftone' || (getStructure(c) === 'pixel' && c.halftoneMode !== 'off')
+  },
+  {
+    kind: 'slider',
+    key: 'halftoneSize',
+    label: 'Rastergröße',
+    section: 'structure',
+    min: 3,
+    max: 50,
+    showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone'
+  },
+  {
+    kind: 'slider',
+    key: 'halftoneAngle',
+    label: 'Winkel',
+    section: 'structure',
+    min: 0,
+    max: 180,
+    unit: '°',
+    showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone'
+  },
+  {
+    kind: 'slider',
+    key: 'halftoneGain',
+    label: 'Punkte dicker / dünner',
+    section: 'structure',
+    min: -50,
+    max: 100,
+    showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone'
+  },
+  {
+    kind: 'slider',
+    key: 'halftoneJitter',
+    label: 'Unruhe',
+    section: 'structure',
+    min: 0,
+    max: 100,
+    showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone'
+  },
+  {
+    kind: 'slider',
+    key: 'halftoneStrength',
+    label: 'Rasteranteil',
+    section: 'structure',
+    min: 0,
+    max: 100,
+    showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone'
+  },
+  {
+    kind: 'slider',
+    key: 'pixelSize',
+    label: 'Pixelgröße',
+    section: 'structure',
+    min: 1,
+    max: 40,
+    showIf: (c) => c.graphicMode === 'pixelBitmap'
+  },
 
   { kind: 'slider', key: 'edgeRoughness', label: 'Ausgefranste Kanten', section: 'wear', min: 0, max: 100 },
   { kind: 'slider', key: 'inkBleed', label: 'Farbe läuft aus', section: 'wear', min: 0, max: 6 },
   { kind: 'slider', key: 'dustAmount', label: 'Staub und Fehlstellen', section: 'wear', min: 0, max: 100 },
   { kind: 'slider', key: 'grainAmount', label: 'Körnung', section: 'wear', min: 0, max: 100 },
 
-  { kind: 'select', key: 'edgeFadeMode', label: 'Randübergang', section: 'edge', options: opts([
-    ['off', 'Aus'], ['smooth', 'Weich ausblenden'], ['torn', 'Gerissen'], ['dissolve', 'Zerbröselt'], ['burned', 'Verbrannt / Kopierer'], ['grunge', 'Grunge-Rahmen']
-  ]) },
+  {
+    kind: 'select',
+    key: 'edgeFadeMode',
+    label: 'Randübergang',
+    section: 'edge',
+    options: opts([
+      ['off', 'Aus'],
+      ['smooth', 'Weich ausblenden'],
+      ['torn', 'Gerissen'],
+      ['dissolve', 'Zerbröselt'],
+      ['burned', 'Verbrannt / Kopierer'],
+      ['grunge', 'Grunge-Rahmen']
+    ])
+  },
   { kind: 'slider', key: 'edgeFadeWidth', label: 'Breite', section: 'edge', min: 0, max: 180, showIf: (c) => c.edgeFadeMode !== 'off' },
   { kind: 'slider', key: 'edgeFadeStrength', label: 'Stärke', section: 'edge', min: 0, max: 100, showIf: (c) => c.edgeFadeMode !== 'off' },
   { kind: 'slider', key: 'edgeFadeNoise', label: 'Rissigkeit', section: 'edge', min: 0, max: 100, showIf: (c) => c.edgeFadeMode !== 'off' },
@@ -166,10 +379,28 @@ export const CONTROL_DEFS: ControlDef[] = [
   { kind: 'slider', key: 'shrinkBlack', label: 'Linien dünner', section: 'cleanup', min: 0, max: 5 },
   { kind: 'slider', key: 'smoothJagged', label: 'Treppenkanten glätten', section: 'cleanup', min: 0, max: 100 },
 
-  { kind: 'select', key: 'thresholdMode', label: 'Schwellen-Methode', section: 'pro', options: opts([
-    ['global', 'Fest (Regler Schwelle)'], ['auto', 'Automatisch (Otsu)'], ['adaptive', 'Lokal, je Bildbereich'], ['edge', 'Lokal mit Kanten']
-  ]), showIf: notPixel },
-  { kind: 'slider', key: 'adaptiveStrength', label: 'Lokale Stärke', section: 'pro', min: 0, max: 100, showIf: (c) => notPixel(c) && (c.thresholdMode === 'adaptive' || c.thresholdMode === 'edge') },
+  {
+    kind: 'select',
+    key: 'thresholdMode',
+    label: 'Schwellen-Methode',
+    section: 'pro',
+    options: opts([
+      ['global', 'Fest (Regler Schwelle)'],
+      ['auto', 'Automatisch (Otsu)'],
+      ['adaptive', 'Lokal, je Bildbereich'],
+      ['edge', 'Lokal mit Kanten']
+    ]),
+    showIf: notPixel
+  },
+  {
+    kind: 'slider',
+    key: 'adaptiveStrength',
+    label: 'Lokale Stärke',
+    section: 'pro',
+    min: 0,
+    max: 100,
+    showIf: (c) => notPixel(c) && (c.thresholdMode === 'adaptive' || c.thresholdMode === 'edge')
+  },
   { kind: 'slider', key: 'edgeStrength', label: 'Konturen betonen', section: 'pro', min: 0, max: 100, showIf: notPixel },
   { kind: 'slider', key: 'sharpen', label: 'Schärfen', section: 'pro', min: 0, max: 100, showIf: notPixel },
   { kind: 'slider', key: 'preBlur', label: 'Vorab weichzeichnen', section: 'pro', min: 0, max: 100, showIf: notPixel },
@@ -178,18 +409,29 @@ export const CONTROL_DEFS: ControlDef[] = [
   { kind: 'slider', key: 'shadowDetail', label: 'Schattendetails', section: 'pro', min: 0, max: 100, showIf: notPixel },
   { kind: 'slider', key: 'highlightDetail', label: 'Lichterdetails', section: 'pro', min: 0, max: 100, showIf: notPixel },
   { kind: 'slider', key: 'whiteCleanup', label: 'Weiß aufräumen', section: 'pro', min: 0, max: 100, showIf: notPixel },
-  { kind: 'select', key: 'graphicMode', label: 'Verarbeitung', section: 'pro', hint: 'Clean Cutout und Photo Poster glätten Flächen stärker. Simple setzt fast alle Effekte aus.', options: opts([
-    ['fullDetail', 'Standard'], ['simpleBW', 'Simple Schwarz/Weiß'], ['cleanCutout', 'Clean Cutout'], ['photoPoster', 'Photo Poster'],
-    ['highDetailInk', 'High Detail Ink'], ['screenprintHalftone', 'Screenprint Halftone'], ['dirtyXerox', 'Dirty Xerox'], ['pixelBitmap', 'Pixel Bitmap']
-  ]) },
+  {
+    kind: 'select',
+    key: 'graphicMode',
+    label: 'Verarbeitung',
+    section: 'pro',
+    hint: 'Clean Cutout und Photo Poster glätten Flächen stärker. Simple setzt fast alle Effekte aus.',
+    options: opts([
+      ['fullDetail', 'Standard'],
+      ['simpleBW', 'Simple Schwarz/Weiß'],
+      ['cleanCutout', 'Clean Cutout'],
+      ['photoPoster', 'Photo Poster'],
+      ['highDetailInk', 'High Detail Ink'],
+      ['screenprintHalftone', 'Screenprint Halftone'],
+      ['dirtyXerox', 'Dirty Xerox'],
+      ['pixelBitmap', 'Pixel Bitmap']
+    ])
+  },
 
   { kind: 'toggle', key: 'transparent', label: 'Weiß transparent', section: 'output' },
   { kind: 'toggle', key: 'invert', label: 'Invertieren', section: 'output' }
 ];
 
-export const DEF_BY_KEY = Object.fromEntries(CONTROL_DEFS.map((d) => [d.key, d])) as Record<ControlKey, ControlDef>;
-
-export function isChanged(controls: Controls, key: ControlKey) {
+function isChanged(controls: Controls, key: ControlKey) {
   return controls[key] !== DEFAULT_CONTROLS[key];
 }
 
@@ -198,9 +440,18 @@ export function sectionChanged(controls: Controls, section: SectionId) {
 }
 
 export const EDGE_PRESETS: Record<string, { label: string; values: Partial<Controls> }> = {
-  soft: { label: 'Weich', values: { edgeFadeMode: 'smooth', edgeFadeWidth: 18, edgeFadeStrength: 52, edgeFadeNoise: 18, transparent: true } },
-  torn: { label: 'Gerissen', values: { edgeFadeMode: 'torn', edgeFadeWidth: 24, edgeFadeStrength: 70, edgeFadeNoise: 55, transparent: true } },
-  heavy: { label: 'Heftig', values: { edgeFadeMode: 'dissolve', edgeFadeWidth: 42, edgeFadeStrength: 88, edgeFadeNoise: 78, transparent: true } }
+  soft: {
+    label: 'Weich',
+    values: { edgeFadeMode: 'smooth', edgeFadeWidth: 18, edgeFadeStrength: 52, edgeFadeNoise: 18, transparent: true }
+  },
+  torn: {
+    label: 'Gerissen',
+    values: { edgeFadeMode: 'torn', edgeFadeWidth: 24, edgeFadeStrength: 70, edgeFadeNoise: 55, transparent: true }
+  },
+  heavy: {
+    label: 'Heftig',
+    values: { edgeFadeMode: 'dissolve', edgeFadeWidth: 42, edgeFadeStrength: 88, edgeFadeNoise: 78, transparent: true }
+  }
 };
 
 export const LOOKS: { id: string; name: string; purpose: string }[] = [

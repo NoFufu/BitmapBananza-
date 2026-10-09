@@ -1,0 +1,5 @@
+dist/
+node_modules/
+package-lock.json
+# Ported verbatim from the original single-file tool; kept as is so it stays diffable against it.
+src/engine/core.js

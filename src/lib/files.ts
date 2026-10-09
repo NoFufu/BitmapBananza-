@@ -1,13 +1,19 @@
 import { useStudio } from '../state/store';
 
-export const ACCEPTED = ['image/png', 'image/jpeg', 'image/webp'];
+const ACCEPTED = ['image/png', 'image/jpeg', 'image/webp'];
 
 export function loadImageElement(file: Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(file);
     const img = new Image();
-    img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Image load failed')); };
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Image load failed'));
+    };
     img.src = url;
   });
 }
@@ -25,7 +31,14 @@ export async function openFiles(list: FileList | File[] | null | undefined) {
     const img = await loadImageElement(files[0]);
     store.loadImage(img, files[0].name);
     const base = files[0].name.replace(/\.[^.]+$/, '');
-    if (base) store.set({ exportName: base.toLowerCase().replace(/[^a-z0-9äöüß]+/gi, '-').replace(/^-|-$/g, '') || 'levis-bitmap-bananza' });
+    if (base)
+      store.set({
+        exportName:
+          base
+            .toLowerCase()
+            .replace(/[^a-z0-9äöüß]+/gi, '-')
+            .replace(/^-|-$/g, '') || 'levis-bitmap-bananza'
+      });
   } catch {
     store.notify('Dieses Bild konnte nicht geladen werden. Unterstützt werden PNG, JPG und WEBP.');
   }
@@ -39,7 +52,10 @@ export function pickFiles() {
     picker.accept = ACCEPTED.join(',');
     picker.multiple = true;
     picker.hidden = true;
-    picker.addEventListener('change', () => { openFiles(picker!.files); picker!.value = ''; });
+    picker.addEventListener('change', () => {
+      openFiles(picker!.files);
+      picker!.value = '';
+    });
     // Some browsers only open the dialog for inputs that are in the document.
     document.body.appendChild(picker);
   }
@@ -51,12 +67,18 @@ export const SAMPLE_PHOTOS = ['/samples/sample-1.jpg', '/samples/sample-2.jpg', 
 const photoCache = new Map<string, Promise<HTMLImageElement>>();
 export function loadPhoto(url: string): Promise<HTMLImageElement> {
   if (!photoCache.has(url)) {
-    photoCache.set(url, new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = () => { photoCache.delete(url); reject(new Error(`Could not load ${url}`)); };
-      img.src = url;
-    }));
+    photoCache.set(
+      url,
+      new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => {
+          photoCache.delete(url);
+          reject(new Error(`Could not load ${url}`));
+        };
+        img.src = url;
+      })
+    );
   }
   return photoCache.get(url)!;
 }

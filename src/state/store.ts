@@ -6,7 +6,12 @@ export type ViewMode = 'processed' | 'original' | 'split';
 export type Tool = 'none' | 'crop' | 'eraser';
 export type ExportMode = 'current' | '2x' | '4x' | 'original' | 'custom';
 export type PreviewQuality = 'fast' | 'balanced' | 'exportNear';
-export interface CropRect { x: number; y: number; w: number; h: number }
+export interface CropRect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
 export type StageBg = 'mat' | 'navy' | 'graphite' | 'light';
 
 /** Work-area backgrounds. The grid stays the same, only the base colour changes. */
@@ -22,7 +27,9 @@ function readStageBg(): StageBg {
   try {
     const v = localStorage.getItem(BG_STORAGE) as StageBg | null;
     return STAGE_BACKGROUNDS.some((b) => b.value === v) ? (v as StageBg) : 'mat';
-  } catch { return 'mat'; }
+  } catch {
+    return 'mat';
+  }
 }
 
 export interface LoadedImage {
@@ -163,16 +170,18 @@ export const useStudio = create<StudioState>((set, get) => ({
   // Live update while dragging; history is written by commit().
   setControl: (key, value) => set((s) => ({ controls: { ...s.controls, [key]: value }, activeLook: null })),
 
-  commit: () => set((s) => {
-    if (sameControls(s.controls, s.committed)) return {};
-    return { past: [...s.past, s.committed].slice(-HISTORY_LIMIT), future: [], committed: s.controls };
-  }),
+  commit: () =>
+    set((s) => {
+      if (sameControls(s.controls, s.committed)) return {};
+      return { past: [...s.past, s.committed].slice(-HISTORY_LIMIT), future: [], committed: s.controls };
+    }),
 
-  setControls: (next, look = null) => set((s) => {
-    const base = sameControls(s.controls, s.committed) ? s.committed : s.controls;
-    if (sameControls(next, base)) return { activeLook: look };
-    return { controls: next, committed: next, past: [...s.past, base].slice(-HISTORY_LIMIT), future: [], activeLook: look };
-  }),
+  setControls: (next, look = null) =>
+    set((s) => {
+      const base = sameControls(s.controls, s.committed) ? s.committed : s.controls;
+      if (sameControls(next, base)) return { activeLook: look };
+      return { controls: next, committed: next, past: [...s.past, base].slice(-HISTORY_LIMIT), future: [], activeLook: look };
+    }),
 
   applyLook: (id) => {
     const preset = presets[id];
@@ -225,28 +234,30 @@ export const useStudio = create<StudioState>((set, get) => ({
     }));
   },
 
-  setWorking: (working) => set((s) => {
-    if (!s.image) return {};
-    return {
-      image: { ...s.image, working },
-      preview: buildPreview(working, s.previewQuality),
-      previewId: s.previewId + 1,
-      strokes: [],
-      strokesVersion: s.strokesVersion + 1,
-      cropRect: null,
-      tool: 'none',
-      panX: 0,
-      panY: 0,
-      pendingFit: true
-    };
-  }),
+  setWorking: (working) =>
+    set((s) => {
+      if (!s.image) return {};
+      return {
+        image: { ...s.image, working },
+        preview: buildPreview(working, s.previewQuality),
+        previewId: s.previewId + 1,
+        strokes: [],
+        strokesVersion: s.strokesVersion + 1,
+        cropRect: null,
+        tool: 'none',
+        panX: 0,
+        panY: 0,
+        pendingFit: true
+      };
+    }),
 
-  setPreviewQuality: (q) => set((s) => ({
-    previewQuality: q,
-    preview: s.image ? buildPreview(s.image.working, q) : null,
-    previewId: s.previewId + 1,
-    pendingFit: Boolean(s.image)
-  })),
+  setPreviewQuality: (q) =>
+    set((s) => ({
+      previewQuality: q,
+      preview: s.image ? buildPreview(s.image.working, q) : null,
+      previewId: s.previewId + 1,
+      pendingFit: Boolean(s.image)
+    })),
 
   // Strokes do not trigger a full re-render; the stage paints them directly.
   addStroke: (stroke) => set((s) => ({ strokes: [...s.strokes, stroke] })),
@@ -259,7 +270,11 @@ export const useStudio = create<StudioState>((set, get) => ({
 
   setView: (patch) => set(patch),
   setStageBg: (bg) => {
-    try { localStorage.setItem(BG_STORAGE, bg); } catch { /* not remembered */ }
+    try {
+      localStorage.setItem(BG_STORAGE, bg);
+    } catch {
+      /* not remembered */
+    }
     set({ stageBg: bg });
   },
   requestFit: () => set((s) => ({ fitRequest: s.fitRequest + 1 })),

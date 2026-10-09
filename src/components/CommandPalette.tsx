@@ -21,10 +21,10 @@ interface Command {
 }
 
 const normalize = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-const sectionTitle = (id: string) => (id === 'output' ? 'Export' : SECTIONS.find((s) => s.id === id)?.title ?? '');
+const sectionTitle = (id: string) => (id === 'output' ? 'Export' : (SECTIONS.find((s) => s.id === id)?.title ?? ''));
 
 /** Open the control's section, scroll it into view, focus it and flash it once. */
-export function revealControl(key: string, focus = true) {
+function revealControl(key: string, focus = true) {
   const def = CONTROL_DEFS.find((d) => d.key === key);
   if (!def) return;
   const store = useStudio.getState();
@@ -47,8 +47,25 @@ function buildCommands(): Command[] {
   const list: Command[] = [
     { id: 'open', label: 'Bild öffnen', group: 'Datei', keys: `${MOD} O`, enabled: always, run: pickFiles },
     { id: 'sample', label: 'Beispielbild laden', group: 'Datei', enabled: always, run: loadSampleImage },
-    { id: 'png', label: 'PNG exportieren', group: 'Export', keys: `${MOD} S`, enabled: hasImage, run: () => { exportPNG(); } },
-    { id: 'zip', label: 'Export-Paket als ZIP', group: 'Export', enabled: hasImage, run: () => { exportPack(); } },
+    {
+      id: 'png',
+      label: 'PNG exportieren',
+      group: 'Export',
+      keys: `${MOD} S`,
+      enabled: hasImage,
+      run: () => {
+        exportPNG();
+      }
+    },
+    {
+      id: 'zip',
+      label: 'Export-Paket als ZIP',
+      group: 'Export',
+      enabled: hasImage,
+      run: () => {
+        exportPack();
+      }
+    },
     { id: 'svg', label: 'SVG-Vektor exportieren', group: 'Export', enabled: hasImage, run: exportSVG },
     { id: 'undo', label: 'Rückgängig', group: 'Verlauf', keys: `${MOD} Z`, enabled: () => s().past.length > 0, run: () => s().undo() },
     { id: 'redo', label: 'Wiederholen', group: 'Verlauf', keys: `${MOD} ⇧ Z`, enabled: () => s().future.length > 0, run: () => s().redo() },
@@ -59,18 +76,42 @@ function buildCommands(): Command[] {
     { id: 'after', label: 'Nachher zeigen', group: 'Ansicht', enabled: hasImage, run: () => s().setView({ viewMode: 'processed' }) },
     { id: 'crop', label: 'Zuschneiden', group: 'Werkzeug', keys: 'C', enabled: hasImage, run: () => toggleTool('crop') },
     { id: 'cropApply', label: 'Zuschnitt übernehmen', group: 'Werkzeug', enabled: () => s().tool === 'crop', run: applyCrop },
-    { id: 'cropReset', label: 'Original wiederherstellen', group: 'Werkzeug', enabled: () => Boolean(s().image && s().image!.working !== s().image!.full), run: resetCrop },
+    {
+      id: 'cropReset',
+      label: 'Original wiederherstellen',
+      group: 'Werkzeug',
+      enabled: () => Boolean(s().image && s().image!.working !== s().image!.full),
+      run: resetCrop
+    },
     { id: 'eraser', label: 'Radierer', group: 'Werkzeug', keys: 'E', enabled: hasImage, run: () => toggleTool('eraser') },
     { id: 'mask', label: 'Maske anzeigen', group: 'Werkzeug', keys: 'M', enabled: hasImage, run: toggleMask },
     { id: 'shirt', label: 'Shirt-fertig machen', group: 'Werkzeug', enabled: hasImage, run: () => s().applyShirtReady() },
     { id: 'reset', label: 'Alle Regler zurücksetzen', group: 'Regler', enabled: always, run: () => s().resetControls() },
     { id: 'keys', label: 'Tastenkürzel anzeigen', group: 'Hilfe', keys: '?', enabled: always, run: () => s().set({ shortcutsOpen: true }) },
-    ...LOOKS.map((l) => ({ id: `look-${l.id}`, label: `Look: ${l.name}`, group: 'Looks', enabled: always, run: () => s().applyLook(l.id) })),
-    ...STRUCTURES.map((st) => ({
-      id: `structure-${st.value}`, label: `Struktur: ${st.label}`, group: 'Struktur', enabled: always,
-      run: () => { s().setControls(withStructure(s().controls, st.value)); s().toggleSection('structure', true); }
+    ...LOOKS.map((l) => ({
+      id: `look-${l.id}`,
+      label: `Look: ${l.name}`,
+      group: 'Looks',
+      enabled: always,
+      run: () => s().applyLook(l.id)
     })),
-    ...STAGE_BACKGROUNDS.map((b) => ({ id: `bg-${b.value}`, label: `Hintergrund: ${b.label}`, group: 'Ansicht', enabled: always, run: () => s().setStageBg(b.value) }))
+    ...STRUCTURES.map((st) => ({
+      id: `structure-${st.value}`,
+      label: `Struktur: ${st.label}`,
+      group: 'Struktur',
+      enabled: always,
+      run: () => {
+        s().setControls(withStructure(s().controls, st.value));
+        s().toggleSection('structure', true);
+      }
+    })),
+    ...STAGE_BACKGROUNDS.map((b) => ({
+      id: `bg-${b.value}`,
+      label: `Hintergrund: ${b.label}`,
+      group: 'Ansicht',
+      enabled: always,
+      run: () => s().setStageBg(b.value)
+    }))
   ];
 
   for (const def of CONTROL_DEFS) {
@@ -102,7 +143,8 @@ function buildCommands(): Command[] {
           run: () => {
             let next = { ...s().controls, [key]: option.value };
             // Picking a dither type should make dithering visible, not stay hidden behind halftone.
-            if (key === 'method' && getStructure(next) !== 'pixel') next = withStructure(next, option.value === 'threshold' ? 'flat' : 'dither');
+            if (key === 'method' && getStructure(next) !== 'pixel')
+              next = withStructure(next, option.value === 'threshold' ? 'flat' : 'dither');
             s().setControls(next);
             revealControl(key, false);
           }
@@ -128,7 +170,13 @@ function Highlight({ text, token }: { text: string; token?: string }) {
   if (!token) return <>{text}</>;
   const at = normalize(text).indexOf(token);
   if (at < 0) return <>{text}</>;
-  return <>{text.slice(0, at)}<mark className="bg-transparent font-bold text-inherit underline underline-offset-2">{text.slice(at, at + token.length)}</mark>{text.slice(at + token.length)}</>;
+  return (
+    <>
+      {text.slice(0, at)}
+      <mark className="bg-transparent font-bold text-inherit underline underline-offset-2">{text.slice(at, at + token.length)}</mark>
+      {text.slice(at + token.length)}
+    </>
+  );
 }
 
 export function CommandPalette() {
@@ -140,7 +188,12 @@ export function CommandPalette() {
   const listRef = useRef<HTMLUListElement>(null);
   const commands = useMemo(() => (open ? buildCommands() : []), [open]);
 
-  useEffect(() => { if (open) { setQuery(''); setActive(0); } }, [open]);
+  useEffect(() => {
+    if (open) {
+      setQuery('');
+      setActive(0);
+    }
+  }, [open]);
 
   const tokens = normalize(query.trim()).split(/\s+/).filter(Boolean);
   const results = useMemo(() => {
@@ -156,7 +209,11 @@ export function CommandPalette() {
   }, [commands, query]);
 
   const close = () => set({ paletteOpen: false });
-  const run = (c?: Command) => { if (!c) return; close(); c.run(); };
+  const run = (c?: Command) => {
+    if (!c) return;
+    close();
+    c.run();
+  };
 
   useEffect(() => {
     listRef.current?.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: 'nearest' });
@@ -171,7 +228,9 @@ export function CommandPalette() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.12 }}
-          onPointerDown={(e) => { if (e.target === e.currentTarget) close(); }}
+          onPointerDown={(e) => {
+            if (e.target === e.currentTarget) close();
+          }}
         >
           <motion.div
             role="dialog"
@@ -189,12 +248,24 @@ export function CommandPalette() {
                 ref={inputRef}
                 autoFocus
                 value={query}
-                onChange={(e) => { setQuery(e.target.value); setActive(0); }}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setActive(0);
+                }}
                 onKeyDown={(e) => {
-                  if (e.key === 'ArrowDown') { e.preventDefault(); setActive((a) => Math.min(results.length - 1, a + 1)); }
-                  else if (e.key === 'ArrowUp') { e.preventDefault(); setActive((a) => Math.max(0, a - 1)); }
-                  else if (e.key === 'Enter') { e.preventDefault(); run(results[active]); }
-                  else if (e.key === 'Escape') { e.preventDefault(); close(); }
+                  if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setActive((a) => Math.min(results.length - 1, a + 1));
+                  } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setActive((a) => Math.max(0, a - 1));
+                  } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    run(results[active]);
+                  } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    close();
+                  }
                 }}
                 placeholder="Threshold, Halftone, Export …"
                 autoComplete="off"
@@ -208,7 +279,9 @@ export function CommandPalette() {
               <kbd>Esc</kbd>
             </div>
             <ul ref={listRef} id="palette-list" role="listbox" className="max-h-[min(52vh,440px)] overflow-y-auto p-1.5">
-              {!results.length && <li className="px-3 py-4.5 text-muted">Nichts gefunden. Versuch es mit einem Reglernamen wie „Körnung“ oder „Halftone“.</li>}
+              {!results.length && (
+                <li className="px-3 py-4.5 text-muted">Nichts gefunden. Versuch es mit einem Reglernamen wie „Körnung“ oder „Halftone“.</li>
+              )}
               {results.map((c, i) => (
                 <li
                   key={c.id}
@@ -219,7 +292,9 @@ export function CommandPalette() {
                   onClick={() => run(c)}
                   className={`flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 ${i === active ? 'bg-npb-tint shadow-[inset_3px_0_0_var(--color-npb-strong)]' : ''}`}
                 >
-                  <span className="min-w-0 flex-1 text-[13.5px]"><Highlight text={c.label} token={tokens[0]} /></span>
+                  <span className="min-w-0 flex-1 text-[13.5px]">
+                    <Highlight text={c.label} token={tokens[0]} />
+                  </span>
                   {c.value && <span className="font-semibold tabular">{c.value()}</span>}
                   <span className="whitespace-nowrap text-[11.5px] text-muted">{c.group}</span>
                   {c.keys && <kbd>{c.keys}</kbd>}
