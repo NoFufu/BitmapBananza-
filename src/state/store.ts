@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { presets, createScaledSourceFromImage, type CanvasSource, type Stroke } from '../engine';
+import type { Analysis } from '../lib/suggest';
 import { DEFAULT_CONTROLS, controlsFromPreset, shirtReady, type ControlKey, type Controls, type SectionId } from '../lib/controls';
 
 export type ViewMode = 'processed' | 'original' | 'split';
@@ -66,6 +67,10 @@ interface StudioState {
   previewId: number;
   strokes: Stroke[];
   strokesVersion: number;
+
+  /** Looks ranked and tuned for the current image; null while analysing. */
+  analysis: Analysis | null;
+  suggestOpen: boolean;
 
   renderVersion: number;
   rendering: boolean;
@@ -136,6 +141,9 @@ export const useStudio = create<StudioState>((set, get) => ({
   strokes: [],
   strokesVersion: 0,
 
+  analysis: null,
+  suggestOpen: false,
+
   renderVersion: 0,
   rendering: false,
   pendingFit: false,
@@ -183,7 +191,10 @@ export const useStudio = create<StudioState>((set, get) => ({
       return { controls: next, committed: next, past: [...s.past, base].slice(-HISTORY_LIMIT), future: [], activeLook: look };
     }),
 
+  // Prefers the version of the look that was tuned to the current image.
   applyLook: (id) => {
+    const tuned = get().analysis?.ranked.find((s) => s.id === id);
+    if (tuned) return get().setControls(tuned.controls, id);
     const preset = presets[id];
     if (!preset) return;
     get().setControls(controlsFromPreset(preset), id);
@@ -219,6 +230,8 @@ export const useStudio = create<StudioState>((set, get) => ({
     set((s) => ({
       image: { full: image, working: image, name },
       preview: buildPreview(image, quality),
+      analysis: null,
+      suggestOpen: true,
       previewId: s.previewId + 1,
       strokes: [],
       strokesVersion: s.strokesVersion + 1,
@@ -240,6 +253,7 @@ export const useStudio = create<StudioState>((set, get) => ({
       return {
         image: { ...s.image, working },
         preview: buildPreview(working, s.previewQuality),
+        analysis: null,
         previewId: s.previewId + 1,
         strokes: [],
         strokesVersion: s.strokesVersion + 1,

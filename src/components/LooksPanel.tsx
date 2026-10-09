@@ -1,8 +1,9 @@
 import { motion } from 'motion/react';
-import { Plus, X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { Plus, Sparkles, X } from 'lucide-react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { createCanvas, presets, renderGraphic, type CanvasSource } from '../engine';
-import { LOOKS, controlsFromPreset } from '../lib/controls';
+import { LOOKS, controlsFromPreset, type Controls } from '../lib/controls';
+import { scaleForPreview } from '../lib/suggest';
 import { SAMPLE_PHOTOS, loadPhoto } from '../lib/files';
 import { useStudio } from '../state/store';
 import { cx } from './ui';
@@ -33,9 +34,8 @@ function squareSource(image: CanvasSource, focusY = 0.4) {
   return c;
 }
 
-function drawLook(target: HTMLCanvasElement, id: string, source: CanvasSource, pixelScale: number) {
-  const preset = { ...presets[id] };
-  if (preset.graphicMode === 'pixelBitmap') preset.pixelSize = Math.max(3, Math.round(Number(preset.pixelSize) * pixelScale));
+function drawLook(target: HTMLCanvasElement, controls: Controls, source: CanvasSource, pixelScale: number) {
+  const preset = scaleForPreview(controls, pixelScale);
   const out = renderGraphic(preset, source);
   const g = target.getContext('2d')!;
   g.fillStyle = '#fff';
@@ -149,24 +149,33 @@ function CustomLooks() {
   );
 }
 
+/** Number of looks that count as a good fit once the image is analysed. */
+const FITTING = 4;
+
 export function LooksPanel() {
   const preview = useStudio((s) => s.preview);
+  const analysis = useStudio((s) => s.analysis);
   const activeLook = useStudio((s) => s.activeLook);
   const applyLook = useStudio((s) => s.applyLook);
-  const canvases = useRef<(HTMLCanvasElement | null)[]>([]);
+  const set = useStudio((s) => s.set);
+  const canvases = useRef<Record<string, HTMLCanvasElement | null>>({});
+
+  // With an analysed image the looks are sorted by fit and use their tuned settings.
+  const ranked = preview && analysis ? analysis.ranked : null;
+  const looks = ranked ?? LOOKS.map((l) => ({ ...l, controls: controlsFromPreset(presets[l.id]) }));
 
   useEffect(() => {
     let cancelled = false;
     let i = 0;
     const run = (sourceFor: (id: string) => CanvasSource | null, pixelScale: number) => {
       const next = () => {
-        if (cancelled || i >= LOOKS.length) return;
-        const look = LOOKS[i];
-        const target = canvases.current[i++];
+        if (cancelled || i >= looks.length) return;
+        const look = looks[i++];
+        const target = canvases.current[look.id];
         const source = sourceFor(look.id);
         if (target && source) {
           try {
-            drawLook(target, look.id, source, pixelScale);
+            drawLook(target, look.controls, source, pixelScale);
           } catch (error) {
             console.warn('Look thumbnail failed', look.id, error);
           }
@@ -194,7 +203,8 @@ export function LooksPanel() {
     return () => {
       cancelled = true;
     };
-  }, [preview]);
+    // `looks` is derived from preview and analysis.
+  }, [preview, analysis]);
 
   return (
     <section aria-labelledby="looks-title" className="border-b border-hair px-3.5 pt-3 pb-3.5">
@@ -202,39 +212,59 @@ export function LooksPanel() {
         <h2 id="looks-title" className="text-[15px] font-extrabold font-compact">
           Looks
         </h2>
-        <span className="text-[11.5px] text-muted">{preview ? 'mit deinem Bild' : 'Ein Klick setzt alle Regler'}</span>
+        {ranked ? (
+          <button
+            type="button"
+            onClick={() => set({ suggestOpen: true })}
+            className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-muted underline-offset-2 hover:text-ink hover:underline"
+          >
+            <Sparkles size={12} /> Vorschläge zeigen
+          </button>
+        ) : (
+          <span className="text-[11.5px] text-muted">{preview ? 'Bild wird analysiert …' : 'Ein Klick setzt alle Regler'}</span>
+        )}
       </div>
       <div className="grid grid-cols-2 gap-x-2 gap-y-2.5 max-[900px]:grid-cols-4 max-[520px]:grid-cols-3">
-        {LOOKS.map((look, i) => {
+        {looks.map((look, i) => {
           const active = activeLook === look.id;
+          const weaker = ranked && i >= FITTING;
           return (
-            <button
-              key={look.id}
-              type="button"
-              aria-pressed={active}
-              onClick={() => applyLook(look.id)}
-              className="group grid gap-px text-left"
-            >
-              <span className="relative mb-1 block">
-                <canvas
-                  ref={(el) => {
-                    canvases.current[i] = el;
-                  }}
-                  width={SIZE}
-                  height={SIZE}
-                  className="block aspect-square h-auto w-full rounded-[3px] border border-hair bg-paper transition-colors group-hover:border-ink"
-                />
-                {active && (
-                  <motion.span
-                    layoutId="look-active"
-                    className="pointer-events-none absolute -inset-[3px] rounded-[5px] border-2 border-ink"
-                    transition={{ type: 'spring', stiffness: 480, damping: 36 }}
-                  />
+            <Fragment key={look.id}>
+              {ranked && i === FITTING && (
+                <p className="col-span-full mt-1 border-t border-dashed border-hair pt-2 text-[11.5px] font-semibold text-muted">
+                  Passt weniger gut zu diesem Bild
+                </p>
+              )}
+              <button
+                type="button"
+                aria-pressed={active}
+                onClick={() => applyLook(look.id)}
+                className={cx(
+                  'group grid content-start gap-px text-left transition-opacity',
+                  weaker && !active && 'opacity-55 hover:opacity-100'
                 )}
-              </span>
-              <span className={cx('text-[12.5px] leading-tight font-bold', active && 'underline underline-offset-2')}>{look.name}</span>
-              <span className="text-[11px] leading-tight text-muted max-[900px]:hidden">{look.purpose}</span>
-            </button>
+              >
+                <span className="relative mb-1 block">
+                  <canvas
+                    ref={(el) => {
+                      canvases.current[look.id] = el;
+                    }}
+                    width={SIZE}
+                    height={SIZE}
+                    className="block aspect-square h-auto w-full rounded-[3px] border border-hair bg-paper transition-colors group-hover:border-ink"
+                  />
+                  {active && (
+                    <motion.span
+                      layoutId="look-active"
+                      className="pointer-events-none absolute -inset-[3px] rounded-[5px] border-2 border-ink"
+                      transition={{ type: 'spring', stiffness: 480, damping: 36 }}
+                    />
+                  )}
+                </span>
+                <span className={cx('text-[12.5px] leading-tight font-bold', active && 'underline underline-offset-2')}>{look.name}</span>
+                <span className="text-[11px] leading-tight text-muted max-[900px]:hidden">{look.purpose}</span>
+              </button>
+            </Fragment>
           );
         })}
       </div>

@@ -4,6 +4,7 @@ import { LeftPanel } from './components/LeftPanel';
 import { ShortcutsDialog, Toast } from './components/Overlays';
 import { RightPanel } from './components/RightPanel';
 import { Stage } from './components/Stage';
+import { SuggestionsDialog } from './components/SuggestionsDialog';
 import { TopBar } from './components/TopBar';
 import { Renderer } from './state/Renderer';
 import { useShortcuts } from './state/useShortcuts';
@@ -85,6 +86,7 @@ export default function App() {
       <Renderer />
       <CommandPalette />
       <ShortcutsDialog />
+      <SuggestionsDialog />
       <Toast />
     </div>
   );
