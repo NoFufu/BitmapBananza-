@@ -1,58 +1,93 @@
-# Levi's Bitmap Bananza
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/logo-dark.svg" />
+    <img src="docs/logo.svg" alt="LBB" width="180" />
+  </picture>
+</p>
 
-Browser tool that turns photos into print-ready black/white graphics: dithering, halftone, xerox distress, shirt-edge masks, crop, variant comparison and PNG/SVG/ZIP export.
+<h1 align="center">Levi's Bitmap Bananza</h1>
 
-Live: https://lbbstudio.pages.dev/
+<p align="center">
+  Fotos im Browser in druckfertige Schwarz-Weiß-Grafiken verwandeln.<br />
+  <a href="https://lbbstudio.pages.dev/"><strong>lbbstudio.pages.dev</strong></a>
+</p>
 
-Everything runs client-side in the browser. Built with React, Vite, Tailwind CSS and Motion.
+<p align="center">
+  <img src="docs/screenshots/desktop.png" alt="Bitmap Bananza auf dem Desktop" width="780" />
+</p>
 
-## Develop
+## Was es kann
+
+- **Acht Looks** mit einem Klick: Clean Photo, Hard Poster, Detail Ink, Newspaper, Dirty Xerox, Shirt Print, Logo Cleanup und Pixel Bitmap
+- **Dithering, Halftone, Glyphen und Xerox-Dreck**, jeder Regler fein einstellbar
+- **Shirt-Kanten**: weiche oder raue Ränder, Weiß transparent, Druck-Check mit Farbdeckung und kleinster Insel
+- **Zuschneiden, Radierer, Vorher/Nachher-Split** und Varianten-Vergleich
+- **Export** als PNG, SVG oder ZIP-Paket (transparent, auf Schwarz, auf Weiß, Druckbericht), auch als Stapel
+- Läuft komplett im Browser, kein Bild verlässt das Gerät
+
+<p align="center">
+  <img src="docs/screenshots/suche.png" alt="Regler-Suche mit Strg K" width="520" />
+  &nbsp;
+  <img src="docs/screenshots/mobile.png" alt="Bitmap Bananza auf dem Handy" width="200" />
+</p>
+
+## Lokal starten
+
+Voraussetzung ist Node 22 (siehe `.nvmrc`).
 
 ```sh
 npm install
-npm run dev        # http://localhost:5173
-npm run build      # typecheck + production build into dist/
-npm run preview    # serve dist/
+npm run dev            # http://localhost:5173
 ```
 
-Node 22 is expected (see `.nvmrc`).
+| Befehl                 | Was passiert                                 |
+| ---------------------- | -------------------------------------------- |
+| `npm run dev`          | Entwicklungsserver mit Hot Reload            |
+| `npm run build`        | Typecheck und Produktions-Build nach `dist/` |
+| `npm run preview`      | Den Build aus `dist/` lokal ausliefern       |
+| `npm run typecheck`    | Nur TypeScript prüfen                        |
+| `npm run format`       | Code mit Prettier formatieren                |
+| `npm run format:check` | Prüfen, ob alles formatiert ist              |
 
-## Structure
+## Aufbau
 
 ```
-src/engine/        image engine, ported verbatim from the original single-file tool
-  core.js          pixel algorithms; DOM reads replaced by parameters
-  index.js         public API: renderGraphic, renderAtSize, analysis, SVG
-  worker.js        renders previews off the main thread
-src/lib/           control schema, export, file loading, shared actions
-src/state/         Zustand store (controls, history, view, tools), renderer, shortcuts
-src/components/    UI: looks, controls, stage, dock, crop, palette, compare, export
-public/            favicon and original logo
+src/
+  engine/        Bild-Engine, unverändert aus dem ursprünglichen Ein-Datei-Tool übernommen
+    core.js      Pixel-Algorithmen
+    index.js     öffentliche API: renderGraphic, renderAtSize, Analyse, SVG
+    worker.js    rendert Vorschauen abseits des Haupt-Threads
+  lib/           Regler-Schema, Export, Dateien laden, gemeinsame Aktionen
+  state/         Zustand-Store (Regler, Verlauf, Ansicht, Werkzeuge), Renderer, Tastenkürzel
+  components/    Oberfläche: Looks, Regler, Bühne, Dock, Zuschnitt, Suche, Vergleich, Export
+public/          Favicon und Beispielbilder
+docs/            Logo und Screenshots für diese README
 ```
 
-Every control is defined once in `src/lib/controls.ts`. Sliders, the command palette, the "changed" dots and reset all read from there, so a new control only needs one entry.
+Jeder Regler ist genau einmal in `src/lib/controls.ts` definiert. Schieberegler, Suche, die „geändert“-Punkte und Zurücksetzen lesen alle von dort, ein neuer Regler braucht also nur einen Eintrag.
 
-The engine output is pixel-identical to the original tool for all eight looks, both in the worker and on the main thread. Pixel Bitmap mode always renders on the main thread because OffscreenCanvas downsamples slightly differently.
+Die Engine liefert für alle acht Looks pixelgleiche Ergebnisse zum Original-Tool, im Worker wie im Haupt-Thread. Pixel Bitmap rendert immer im Haupt-Thread, weil OffscreenCanvas minimal anders herunterskaliert.
 
-## Shortcuts
+## Tastenkürzel
 
-| Keys                  | Action                                     |
-| --------------------- | ------------------------------------------ |
-| Ctrl/⌘ K              | Search any control or action               |
-| Ctrl/⌘ O              | Open image                                 |
-| Ctrl/⌘ S              | Export PNG                                 |
-| Ctrl/⌘ Z, Ctrl/⌘ ⇧ Z  | Undo, redo                                 |
-| B (hold)              | Show original                              |
-| S                     | Split before/after                         |
-| F, 1, + / −           | Fit, 100 %, zoom                           |
-| C, E, M               | Crop (Enter applies), eraser, mask preview |
-| ?                     | Shortcut list                              |
-| Double-click a slider | Reset it                                   |
+| Tasten                 | Aktion                                         |
+| ---------------------- | ---------------------------------------------- |
+| Strg/⌘ K               | Regler oder Aktion suchen                      |
+| Strg/⌘ O               | Bild öffnen                                    |
+| Strg/⌘ S               | PNG exportieren                                |
+| Strg/⌘ Z, Strg/⌘ ⇧ Z   | Rückgängig, Wiederholen                        |
+| B (halten)             | Original zeigen                                |
+| S                      | Vorher/Nachher teilen                          |
+| F, 1, + / −            | Einpassen, 100 %, Zoom                         |
+| C, E, M                | Zuschneiden (Enter übernimmt), Radierer, Maske |
+| ?                      | Alle Tastenkürzel                              |
+| Doppelklick auf Regler | Regler zurücksetzen                            |
 
-## Deploy (Cloudflare Pages)
+## Deployment
 
-Connect this repository in Cloudflare Pages with:
+Die Seite läuft auf Cloudflare Pages (Projekt `lbbstudio`). Jeder Push auf `main` wird automatisch gebaut.
 
-- Framework preset: Vite (or None)
-- Build command: `npm run build`
-- Build output directory: `dist`
+- Build-Befehl: `npm run build`
+- Ausgabeordner: `dist` (steht auch in `wrangler.toml`)
+
+Gebaut mit React, Vite, Tailwind CSS, Motion und Zustand.
