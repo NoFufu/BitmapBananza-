@@ -1,3 +1,4 @@
+[README.md](https://github.com/user-attachments/files/33246894/README.md)
 # Levi's Bitmap Bananza
 
 Browser tool that turns photos into print-ready black/white graphics: dithering, halftone, xerox distress, shirt-edge masks, crop, variant comparison and PNG/SVG/ZIP export.
