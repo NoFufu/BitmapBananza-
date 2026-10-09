@@ -25,6 +25,39 @@
 - **Export** als PNG, SVG oder ZIP-Paket (transparent, auf Schwarz, auf Weiß, Druckbericht), auch als Stapel
 - Läuft komplett im Browser, kein Bild verlässt das Gerät
 
+## Beispiele
+
+Ein Foto, acht Looks. Jeder Look ist nur ein Startpunkt, danach lässt sich jeder Regler weiter verstellen.
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/looks/original.jpg" alt="Original" width="240" /><br /><b>Original</b><br /><sub>Das Foto</sub></td>
+    <td align="center"><img src="docs/looks/cleanPhoto.png" alt="Clean Photo" width="240" /><br /><b>Clean Photo</b><br /><sub>Foto, sauber getrennt</sub></td>
+    <td align="center"><img src="docs/looks/hardPoster.png" alt="Hard Poster" width="240" /><br /><b>Hard Poster</b><br /><sub>Große Flächen</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/looks/highDetailInk.png" alt="Detail Ink" width="240" /><br /><b>Detail Ink</b><br /><sub>Kanten und Feinheiten</sub></td>
+    <td align="center"><img src="docs/looks/softNewspaper.png" alt="Newspaper" width="240" /><br /><b>Newspaper</b><br /><sub>Feines Punktraster</sub></td>
+    <td align="center"><img src="docs/looks/dirtyXerox.png" alt="Dirty Xerox" width="240" /><br /><b>Dirty Xerox</b><br /><sub>Kopierer-Dreck</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/looks/shirtPrintGraphic.png" alt="Shirt Print" width="240" /><br /><b>Shirt Print</b><br /><sub>Transparent, weicher Rand</sub></td>
+    <td align="center"><img src="docs/looks/logoCleanup.png" alt="Logo Cleanup" width="240" /><br /><b>Logo Cleanup</b><br /><sub>Scan zu klarer Fläche</sub></td>
+    <td align="center"><img src="docs/looks/pixelClassic.png" alt="Pixel Bitmap" width="240" /><br /><b>Pixel Bitmap</b><br /><sub>Grobe Pixelblöcke</sub></td>
+  </tr>
+</table>
+
+### Vorher und Nachher
+
+<p align="center">
+  <img src="docs/beispiele/detail-ink.jpg" alt="Vorher und Nachher mit Detail Ink" width="420" />
+  &nbsp;
+  <img src="docs/beispiele/newspaper.jpg" alt="Vorher und Nachher mit Newspaper" width="420" />
+</p>
+<p align="center"><sub>Links Detail Ink, rechts Newspaper. Alle Bilder sind direkt mit der Engine aus den Beispielfotos der App gerendert.</sub></p>
+
+## Oberfläche
+
 <p align="center">
   <img src="docs/screenshots/suche.png" alt="Regler-Suche mit Strg K" width="520" />
   &nbsp;
@@ -61,7 +94,7 @@ src/
   state/         Zustand-Store (Regler, Verlauf, Ansicht, Werkzeuge), Renderer, Tastenkürzel
   components/    Oberfläche: Looks, Regler, Bühne, Dock, Zuschnitt, Suche, Vergleich, Export
 public/          Favicon und Beispielbilder
-docs/            Logo und Screenshots für diese README
+docs/            Logo, Screenshots und Beispielbilder für diese README
 ```
 
 Jeder Regler ist genau einmal in `src/lib/controls.ts` definiert. Schieberegler, Suche, die „geändert“-Punkte und Zurücksetzen lesen alle von dort, ein neuer Regler braucht also nur einen Eintrag.
