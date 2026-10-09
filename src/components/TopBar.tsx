@@ -39,6 +39,17 @@ export function ExportButton() {
   );
 }
 
+/** The LBB mark, traced from Levi's logo. The second B's bowls cut into the third letter. */
+function Logo({ className }: { className?: string }) {
+  return (
+    <svg viewBox="278 200 1219 500" className={className} fill="currentColor" fillRule="evenodd" aria-hidden>
+      <path d="M278 203H457V578H580V700H278Z" />
+      <path d="M580 200H971V700H716V578H580ZM750 315H874Q902 315 902 343V372Q902 400 874 400H750ZM750 503H879Q907 503 907 531V557Q907 585 879 585H750Z" />
+      <path d="M975 200H1340C1424 200 1483 258 1483 330C1483 387 1444 430 1390 442C1452 455 1497 505 1497 572C1497 642 1440 700 1356 700H975V696C1044 690 1084 640 1084 570C1084 503 1044 456 986 442C1040 428 1078 388 1078 320C1078 257 1040 212 975 207ZM1143 315H1267Q1295 315 1295 343V372Q1295 400 1267 400H1143ZM1143 503H1272Q1300 503 1300 531V557Q1300 585 1272 585H1143Z" />
+    </svg>
+  );
+}
+
 export function TopBar() {
   const image = useStudio((s) => s.image);
   const canUndo = useStudio((s) => s.past.length > 0 || s.controls !== s.committed);
@@ -50,7 +61,7 @@ export function TopBar() {
   return (
     <header className="flex h-14 min-w-0 items-center gap-4 border-b border-ink bg-paper pr-3 pl-4 max-[900px]:sticky max-[900px]:top-0 max-[900px]:z-30 max-[900px]:h-[52px] max-[900px]:gap-2 max-[900px]:pr-2 max-[900px]:pl-3">
       <a href="./" className="shrink-0 text-ink no-underline" aria-label="Levi's Bitmap Bananza, neu laden">
-        <span className="block text-[21px] leading-none font-black whitespace-nowrap uppercase font-compact tracking-[-0.005em] [word-spacing:0.12em] max-[900px]:text-[18px] max-[380px]:text-[15px]">Levi's Bitmap Bananza</span>
+        <Logo className="block h-[26px] w-auto max-[900px]:h-6" />
       </a>
 
       {image && (
