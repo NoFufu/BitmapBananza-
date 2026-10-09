@@ -29,7 +29,7 @@ function bayerTile(t: number, cell: number) {
   return tile;
 }
 
-export function zoomAt(newZoom: number, clientX?: number, clientY?: number) {
+function zoomAt(newZoom: number, clientX?: number, clientY?: number) {
   const s = useStudio.getState();
   const canvas = document.getElementById('display-canvas') as HTMLCanvasElement | null;
   const zoom = clamp(Math.round(newZoom), ZOOM_MIN, ZOOM_MAX);

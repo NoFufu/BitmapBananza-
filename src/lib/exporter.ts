@@ -15,7 +15,7 @@ const loadZip = async () => new (await import('jszip')).default();
 const VERSION = '5.0';
 
 /** Same rules as the original getExportSize(). */
-export function exportSizeFor(base: Size, mode: ExportMode, customWidth: number, original?: Size): Size {
+function exportSizeFor(base: Size, mode: ExportMode, customWidth: number, original?: Size): Size {
   let { width, height } = base;
   if (mode === '2x') { width = base.width * 2; height = base.height * 2; }
   if (mode === '4x') { width = base.width * 4; height = base.height * 4; }

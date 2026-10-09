@@ -24,7 +24,7 @@ const normalize = (t: string) => t.toLowerCase().normalize('NFD').replace(/[Ì€-Í
 const sectionTitle = (id: string) => (id === 'output' ? 'Export' : SECTIONS.find((s) => s.id === id)?.title ?? '');
 
 /** Open the control's section, scroll it into view, focus it and flash it once. */
-export function revealControl(key: string, focus = true) {
+function revealControl(key: string, focus = true) {
   const def = CONTROL_DEFS.find((d) => d.key === key);
   if (!def) return;
   const store = useStudio.getState();

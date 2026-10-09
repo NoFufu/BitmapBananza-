@@ -1,6 +1,6 @@
 import { useStudio } from '../state/store';
 
-export const ACCEPTED = ['image/png', 'image/jpeg', 'image/webp'];
+const ACCEPTED = ['image/png', 'image/jpeg', 'image/webp'];
 
 export function loadImageElement(file: Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {

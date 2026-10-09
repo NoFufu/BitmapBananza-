@@ -187,9 +187,7 @@ export const CONTROL_DEFS: ControlDef[] = [
   { kind: 'toggle', key: 'invert', label: 'Invertieren', section: 'output' }
 ];
 
-export const DEF_BY_KEY = Object.fromEntries(CONTROL_DEFS.map((d) => [d.key, d])) as Record<ControlKey, ControlDef>;
-
-export function isChanged(controls: Controls, key: ControlKey) {
+function isChanged(controls: Controls, key: ControlKey) {
   return controls[key] !== DEFAULT_CONTROLS[key];
 }
 

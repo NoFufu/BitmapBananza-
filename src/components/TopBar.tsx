@@ -10,7 +10,7 @@ const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigat
 export const MOD = isMac ? '⌘' : 'Strg';
 
 /** Export button that shows its own progress and success. */
-export function ExportButton() {
+function ExportButton() {
   const hasImage = useStudio((s) => Boolean(s.image && s.renderVersion));
   const [state, setState] = useState<'idle' | 'busy' | 'done'>('idle');
   const run = async () => {

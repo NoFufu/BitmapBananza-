@@ -13,7 +13,7 @@ export const CROP_ASPECTS: { value: string; label: string; ratio: number | null 
 const MIN = 0.02;
 
 /** Fit a normalized rect to a pixel aspect ratio, keeping its centre, inside 0..1. */
-export function enforceAspect(rect: CropRect, ratio: number | null): CropRect {
+function enforceAspect(rect: CropRect, ratio: number | null): CropRect {
   const canvas = processed.canvas;
   if (!ratio || !canvas) return rect;
   const imageRatio = canvas.width / canvas.height;
