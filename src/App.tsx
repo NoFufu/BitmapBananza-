@@ -14,7 +14,9 @@ function readWidth(key: string, fallback: number) {
   try {
     const v = Number(localStorage.getItem(key));
     return Number.isFinite(v) && v > 0 ? v : fallback;
-  } catch { return fallback; }
+  } catch {
+    return fallback;
+  }
 }
 
 /** Drag handle between a sidebar and the stage; arrow keys work too. */
@@ -29,13 +31,18 @@ function Resizer({ side, width, onChange }: { side: 'left' | 'right'; width: num
       tabIndex={0}
       className="group absolute inset-y-0 z-20 w-3 cursor-col-resize touch-none max-[900px]:hidden"
       style={side === 'left' ? { left: width - 6 } : { right: width - 6 }}
-      onPointerDown={(e) => { start.current = { x: e.clientX, w: width }; e.currentTarget.setPointerCapture(e.pointerId); }}
+      onPointerDown={(e) => {
+        start.current = { x: e.clientX, w: width };
+        e.currentTarget.setPointerCapture(e.pointerId);
+      }}
       onPointerMove={(e) => {
         if (!start.current) return;
         const delta = e.clientX - start.current.x;
         onChange(start.current.w + (side === 'left' ? delta : -delta));
       }}
-      onPointerUp={() => { start.current = null; }}
+      onPointerUp={() => {
+        start.current = null;
+      }}
       onKeyDown={(e) => {
         if (e.key === 'ArrowLeft') onChange(width + (side === 'left' ? -16 : 16));
         if (e.key === 'ArrowRight') onChange(width + (side === 'left' ? 16 : -16));
@@ -57,7 +64,9 @@ export default function App() {
     try {
       localStorage.setItem(STORAGE.left, String(Math.round(left)));
       localStorage.setItem(STORAGE.right, String(Math.round(right)));
-    } catch { /* storage blocked: widths just are not remembered */ }
+    } catch {
+      /* storage blocked: widths just are not remembered */
+    }
   }, [left, right]);
 
   return (

@@ -36,18 +36,18 @@ The engine output is pixel-identical to the original tool for all eight looks, b
 
 ## Shortcuts
 
-| Keys | Action |
-| --- | --- |
-| Ctrl/⌘ K | Search any control or action |
-| Ctrl/⌘ O | Open image |
-| Ctrl/⌘ S | Export PNG |
-| Ctrl/⌘ Z, Ctrl/⌘ ⇧ Z | Undo, redo |
-| B (hold) | Show original |
-| S | Split before/after |
-| F, 1, + / − | Fit, 100 %, zoom |
-| C, E, M | Crop (Enter applies), eraser, mask preview |
-| ? | Shortcut list |
-| Double-click a slider | Reset it |
+| Keys                  | Action                                     |
+| --------------------- | ------------------------------------------ |
+| Ctrl/⌘ K              | Search any control or action               |
+| Ctrl/⌘ O              | Open image                                 |
+| Ctrl/⌘ S              | Export PNG                                 |
+| Ctrl/⌘ Z, Ctrl/⌘ ⇧ Z  | Undo, redo                                 |
+| B (hold)              | Show original                              |
+| S                     | Split before/after                         |
+| F, 1, + / −           | Fit, 100 %, zoom                           |
+| C, E, M               | Crop (Enter applies), eraser, mask preview |
+| ?                     | Shortcut list                              |
+| Double-click a slider | Reset it                                   |
 
 ## Deploy (Cloudflare Pages)
 

@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "@fontsource-variable/archivo/wdth.css";
+@import 'tailwindcss';
+@import '@fontsource-variable/archivo/wdth.css';
 
 /*
   The artwork is pure black ink on white paper. Everything that is tool and
@@ -7,7 +7,7 @@
   pencil colour repro cameras ignore. The work area is a cutting mat.
 */
 @theme {
-  --font-sans: "Archivo Variable", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: 'Archivo Variable', 'Helvetica Neue', Arial, sans-serif;
   --color-ink: #000000;
   --color-paper: #ffffff;
   --color-panel: #f4f4f2;
@@ -24,7 +24,11 @@
 }
 
 @layer base {
-  html, body, #root { height: 100%; }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
   body {
     margin: 0;
     background: var(--color-panel);
@@ -34,21 +38,42 @@
     line-height: 1.4;
     -webkit-font-smoothing: antialiased;
   }
-  :focus-visible { outline: 2px solid var(--color-npb-strong); outline-offset: 2px; }
-  button { cursor: pointer; }
-  button:disabled { cursor: default; }
+  :focus-visible {
+    outline: 2px solid var(--color-npb-strong);
+    outline-offset: 2px;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: default;
+  }
   kbd {
-    display: inline-flex; align-items: center; justify-content: center;
-    min-width: 20px; height: 20px; padding: 0 5px;
-    border: 1px solid var(--color-hair); border-bottom-width: 2px; border-radius: 4px;
-    background: var(--color-paper); font: 600 11px/1 var(--font-sans); color: var(--color-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border: 1px solid var(--color-hair);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    background: var(--color-paper);
+    font: 600 11px/1 var(--font-sans);
+    color: var(--color-muted);
   }
 }
 
 /* Compact, condensed cut of Archivo for headings and the wordmark. */
-@utility font-compact { font-stretch: 72%; }
-@utility font-tight { font-stretch: 88%; }
-@utility tabular { font-variant-numeric: tabular-nums; }
+@utility font-compact {
+  font-stretch: 72%;
+}
+@utility font-tight {
+  font-stretch: 88%;
+}
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
 
 /* Cutting mat: fine 24px grid with a stronger 120px grid. */
 @utility mat {
@@ -58,7 +83,11 @@
     linear-gradient(90deg, var(--grid-strong, rgba(255, 255, 255, 0.13)) 1px, transparent 1px),
     linear-gradient(var(--grid-soft, rgba(255, 255, 255, 0.06)) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-soft, rgba(255, 255, 255, 0.06)) 1px, transparent 1px);
-  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
   background-position: center;
 }
 
@@ -68,7 +97,9 @@
     linear-gradient(45deg, #e6e6e6 25%, transparent 25%, transparent 75%, #e6e6e6 75%),
     linear-gradient(45deg, #e6e6e6 25%, transparent 25%, transparent 75%, #e6e6e6 75%);
   background-size: 16px 16px;
-  background-position: 0 0, 8px 8px;
+  background-position:
+    0 0,
+    8px 8px;
 }
 
 /* Crop marks at the four corners of the sheet. */
@@ -98,56 +129,155 @@
   background: transparent;
   cursor: pointer;
 }
-.range::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: linear-gradient(var(--color-ink), var(--color-ink)) 0 / var(--p) 100% no-repeat, var(--color-hair); }
-.range::-moz-range-track { height: 4px; border-radius: 2px; background: var(--color-hair); }
-.range::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--color-ink); }
+.range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background:
+    linear-gradient(var(--color-ink), var(--color-ink)) 0 / var(--p) 100% no-repeat,
+    var(--color-hair);
+}
+.range::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-hair);
+}
+.range::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-ink);
+}
 .range::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 10px; height: 18px; margin-top: -7px;
-  border: 2px solid var(--color-paper); border-radius: 3px;
-  background: var(--color-ink); box-shadow: 0 0 0 1px var(--color-ink);
+  width: 10px;
+  height: 18px;
+  margin-top: -7px;
+  border: 2px solid var(--color-paper);
+  border-radius: 3px;
+  background: var(--color-ink);
+  box-shadow: 0 0 0 1px var(--color-ink);
   transition: transform 120ms var(--ease-out-soft);
 }
-.range::-moz-range-thumb { width: 6px; height: 14px; border: 2px solid var(--color-paper); border-radius: 3px; background: var(--color-ink); box-shadow: 0 0 0 1px var(--color-ink); }
-.range:active::-webkit-slider-thumb { transform: scaleY(1.15); }
-.range:focus-visible { outline: none; }
-.range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 1px var(--color-ink), 0 0 0 4px var(--color-npb); }
-.range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 1px var(--color-ink), 0 0 0 4px var(--color-npb); }
+.range::-moz-range-thumb {
+  width: 6px;
+  height: 14px;
+  border: 2px solid var(--color-paper);
+  border-radius: 3px;
+  background: var(--color-ink);
+  box-shadow: 0 0 0 1px var(--color-ink);
+}
+.range:active::-webkit-slider-thumb {
+  transform: scaleY(1.15);
+}
+.range:focus-visible {
+  outline: none;
+}
+.range:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 1px var(--color-ink),
+    0 0 0 4px var(--color-npb);
+}
+.range:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 1px var(--color-ink),
+    0 0 0 4px var(--color-npb);
+}
 
 /* The threshold track is the tonal range it cuts: black to white. */
-.range-tone::-webkit-slider-runnable-track { height: 8px; border: 1px solid var(--color-ink); border-radius: 0; background: linear-gradient(90deg, #000, #fff); }
-.range-tone::-webkit-slider-thumb { margin-top: -6px; }
-.range-tone::-moz-range-track { height: 8px; border: 1px solid var(--color-ink); border-radius: 0; background: linear-gradient(90deg, #000, #fff); }
-.range-tone::-moz-range-progress { background: transparent; }
+.range-tone::-webkit-slider-runnable-track {
+  height: 8px;
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  background: linear-gradient(90deg, #000, #fff);
+}
+.range-tone::-webkit-slider-thumb {
+  margin-top: -6px;
+}
+.range-tone::-moz-range-track {
+  height: 8px;
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  background: linear-gradient(90deg, #000, #fff);
+}
+.range-tone::-moz-range-progress {
+  background: transparent;
+}
 
 .field {
-  width: 100%; height: 34px; padding: 0 10px;
-  border: 1px solid var(--color-hair); border-radius: 6px;
-  background: var(--color-paper); font-size: 13px;
+  width: 100%;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--color-hair);
+  border-radius: 6px;
+  background: var(--color-paper);
+  font-size: 13px;
 }
-.field:hover { border-color: var(--color-line); }
-.field:focus-visible { outline: none; border-color: var(--color-npb-strong); box-shadow: 0 0 0 3px var(--color-npb-tint); }
+.field:hover {
+  border-color: var(--color-line);
+}
+.field:focus-visible {
+  outline: none;
+  border-color: var(--color-npb-strong);
+  box-shadow: 0 0 0 3px var(--color-npb-tint);
+}
 select.field {
-  appearance: none; padding-right: 30px; cursor: pointer;
-  background-image: linear-gradient(45deg, transparent 50%, var(--color-ink) 50%), linear-gradient(135deg, var(--color-ink) 50%, transparent 50%);
-  background-position: calc(100% - 15px) 15px, calc(100% - 11px) 15px;
-  background-size: 4px 4px, 4px 4px; background-repeat: no-repeat;
+  appearance: none;
+  padding-right: 30px;
+  cursor: pointer;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--color-ink) 50%), linear-gradient(135deg, var(--color-ink) 50%, transparent 50%);
+  background-position:
+    calc(100% - 15px) 15px,
+    calc(100% - 11px) 15px;
+  background-size:
+    4px 4px,
+    4px 4px;
+  background-repeat: no-repeat;
 }
 
-.scrollbar-thin { scrollbar-width: thin; scrollbar-color: var(--color-line) transparent; }
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
 
 /* A control reached from the command palette blinks once. */
-.flash { animation: flash 1.2s ease-out; }
+.flash {
+  animation: flash 1.2s ease-out;
+}
 @keyframes flash {
-  0%, 40% { background: var(--color-npb-tint); box-shadow: 0 0 0 6px var(--color-npb-tint); }
-  100% { background: transparent; box-shadow: 0 0 0 6px transparent; }
+  0%,
+  40% {
+    background: var(--color-npb-tint);
+    box-shadow: 0 0 0 6px var(--color-npb-tint);
+  }
+  100% {
+    background: transparent;
+    box-shadow: 0 0 0 6px transparent;
+  }
 }
 
 /* Rendering: a non-photo-blue scan line sweeps the sheet, only if it takes a moment. */
-.scan-line { opacity: 0; }
-.is-rendering .scan-line { animation: scan 1.1s 220ms linear infinite; }
-@keyframes scan { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 1; } }
+.scan-line {
+  opacity: 0;
+}
+.is-rendering .scan-line {
+  animation: scan 1.1s 220ms linear infinite;
+}
+@keyframes scan {
+  0% {
+    top: 0;
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 1;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

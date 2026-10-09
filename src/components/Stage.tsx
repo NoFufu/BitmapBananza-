@@ -12,10 +12,14 @@ import { cx } from './ui';
 const ZOOM_MIN = 10;
 const ZOOM_MAX = 1000;
 const BAYER8 = [
-  [0, 32, 8, 40, 2, 34, 10, 42], [48, 16, 56, 24, 50, 18, 58, 26],
-  [12, 44, 4, 36, 14, 46, 6, 38], [60, 28, 52, 20, 62, 30, 54, 22],
-  [3, 35, 11, 43, 1, 33, 9, 41], [51, 19, 59, 27, 49, 17, 57, 25],
-  [15, 47, 7, 39, 13, 45, 5, 37], [63, 31, 55, 23, 61, 29, 53, 21]
+  [0, 32, 8, 40, 2, 34, 10, 42],
+  [48, 16, 56, 24, 50, 18, 58, 26],
+  [12, 44, 4, 36, 14, 46, 6, 38],
+  [60, 28, 52, 20, 62, 30, 54, 22],
+  [3, 35, 11, 43, 1, 33, 9, 41],
+  [51, 19, 59, 27, 49, 17, 57, 25],
+  [15, 47, 7, 39, 13, 45, 5, 37],
+  [63, 31, 55, 23, 61, 29, 53, 21]
 ];
 const REVEAL_MS = 750;
 
@@ -33,12 +37,15 @@ function zoomAt(newZoom: number, clientX?: number, clientY?: number) {
   const s = useStudio.getState();
   const canvas = document.getElementById('display-canvas') as HTMLCanvasElement | null;
   const zoom = clamp(Math.round(newZoom), ZOOM_MIN, ZOOM_MAX);
-  if (!canvas || clientX === undefined || clientY === undefined || zoom === s.zoom) { s.setView({ zoom }); return; }
+  if (!canvas || clientX === undefined || clientY === undefined || zoom === s.zoom) {
+    s.setView({ zoom });
+    return;
+  }
   const rect = canvas.getBoundingClientRect();
   const relX = rect.width ? clamp((clientX - rect.left) / rect.width, 0, 1) : 0.5;
   const relY = rect.height ? clamp((clientY - rect.top) / rect.height, 0, 1) : 0.5;
-  const w = canvas.width * zoom / 100;
-  const h = canvas.height * zoom / 100;
+  const w = (canvas.width * zoom) / 100;
+  const h = (canvas.height * zoom) / 100;
   s.setView({ zoom, panX: s.panX - (w - rect.width) * (relX - 0.5), panY: s.panY - (h - rect.height) * (relY - 0.5) });
 }
 
@@ -76,7 +83,10 @@ export function Stage() {
     const src = processed.canvas;
     const state = useStudio.getState();
     if (!out || !src || !state.preview) return;
-    if (out.width !== src.width || out.height !== src.height) { out.width = src.width; out.height = src.height; }
+    if (out.width !== src.width || out.height !== src.height) {
+      out.width = src.width;
+      out.height = src.height;
+    }
     const ctx = out.getContext('2d')!;
     ctx.clearRect(0, 0, out.width, out.height);
     ctx.imageSmoothingEnabled = !pixel;
@@ -116,7 +126,10 @@ export function Stage() {
     const reveal = revealRef.current;
     if (reveal) {
       const t = (performance.now() - reveal.start) / REVEAL_MS;
-      if (t >= 1) { revealRef.current = null; return; }
+      if (t >= 1) {
+        revealRef.current = null;
+        return;
+      }
       const tmp = document.createElement('canvas');
       tmp.width = out.width;
       tmp.height = out.height;
@@ -155,7 +168,9 @@ export function Stage() {
     draw();
   }, [renderVersion, viewMode, split, maskPreview, draw, fit, revealId, preview]);
 
-  useEffect(() => { if (fitRequest) fit(); }, [fitRequest, fit]);
+  useEffect(() => {
+    if (fitRequest) fit();
+  }, [fitRequest, fit]);
 
   // ---------- Pan, wheel zoom, pinch ----------
   const pointers = useRef(new Map<number, { x: number; y: number }>());
@@ -225,7 +240,10 @@ export function Stage() {
       zoomAt(pinchStart.current.zoom * (dist / pinchStart.current.dist), (a.x + b.x) / 2, (a.y + b.y) / 2);
       return;
     }
-    if (erasing.current) { eraseAt(e); return; }
+    if (erasing.current) {
+      eraseAt(e);
+      return;
+    }
     if (panStart.current) {
       useStudio.getState().setView({
         panX: panStart.current.panX + e.clientX - panStart.current.x,
@@ -237,16 +255,28 @@ export function Stage() {
   const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     pointers.current.delete(e.pointerId);
     if (pointers.current.size < 2) pinchStart.current = null;
-    if (!pointers.current.size) { panStart.current = null; erasing.current = false; }
+    if (!pointers.current.size) {
+      panStart.current = null;
+      erasing.current = false;
+    }
   };
 
   // ---------- Drop ----------
-  const onDragOver = (e: React.DragEvent) => { e.preventDefault(); setDragOver(true); };
-  const onDragLeave = (e: React.DragEvent) => { if (!stageRef.current?.contains(e.relatedTarget as Node)) setDragOver(false); };
-  const onDrop = (e: React.DragEvent) => { e.preventDefault(); setDragOver(false); openFiles(e.dataTransfer.files); };
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(true);
+  };
+  const onDragLeave = (e: React.DragEvent) => {
+    if (!stageRef.current?.contains(e.relatedTarget as Node)) setDragOver(false);
+  };
+  const onDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    openFiles(e.dataTransfer.files);
+  };
 
-  const width = processed.canvas ? Math.max(1, Math.round(processed.canvas.width * zoom / 100)) : 0;
-  const height = processed.canvas ? Math.max(1, Math.round(processed.canvas.height * zoom / 100)) : 0;
+  const width = processed.canvas ? Math.max(1, Math.round((processed.canvas.width * zoom) / 100)) : 0;
+  const height = processed.canvas ? Math.max(1, Math.round((processed.canvas.height * zoom) / 100)) : 0;
   const hasCanvas = Boolean(image && processed.canvas && renderVersion);
   const panning = Boolean(panStart.current);
 
@@ -280,26 +310,29 @@ export function Stage() {
         className="absolute top-[calc(50%-26px)] left-1/2 z-[2]"
         style={{ transform: `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px))` }}
       >
-      <motion.div
-        className={cx('relative bg-paper', rendering && 'is-rendering', transparent && hasCanvas && 'checker')}
-        style={{ boxShadow: '0 1px 0 rgba(0,0,0,.25), 0 18px 40px -18px rgba(0,0,0,.55)' }}
-        animate={dragOver ? { scale: 1.02, rotate: -0.6 } : { scale: 1, rotate: 0 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-      >
-        <span aria-hidden className="crop-marks pointer-events-none absolute -inset-[18px]" />
-        {dragOver && <span aria-hidden className="pointer-events-none absolute -inset-2.5 outline-3 outline-npb" />}
-        {!hasCanvas && <EmptyState dragOver={dragOver} loading={Boolean(image)} />}
-        <canvas
-          id="display-canvas"
-          ref={canvasRef}
-          hidden={!hasCanvas}
-          className={cx('block', tool === 'eraser' && 'cursor-cell', tool === 'crop' && 'cursor-crosshair')}
-          style={{ width, height, imageRendering: pixel ? 'pixelated' : 'auto' }}
-        />
-        {hasCanvas && viewMode === 'split' && !maskPreview && tool !== 'crop' && <SplitHandle canvasRef={canvasRef} onMove={draw} />}
-        {hasCanvas && tool === 'crop' && <CropOverlay />}
-        <div aria-hidden className="scan-line pointer-events-none absolute inset-x-0 top-0 z-[6] h-0.5 bg-npb shadow-[0_0_12px_2px_rgba(138,207,232,.8)]" />
-      </motion.div>
+        <motion.div
+          className={cx('relative bg-paper', rendering && 'is-rendering', transparent && hasCanvas && 'checker')}
+          style={{ boxShadow: '0 1px 0 rgba(0,0,0,.25), 0 18px 40px -18px rgba(0,0,0,.55)' }}
+          animate={dragOver ? { scale: 1.02, rotate: -0.6 } : { scale: 1, rotate: 0 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+        >
+          <span aria-hidden className="crop-marks pointer-events-none absolute -inset-[18px]" />
+          {dragOver && <span aria-hidden className="pointer-events-none absolute -inset-2.5 outline-3 outline-npb" />}
+          {!hasCanvas && <EmptyState dragOver={dragOver} loading={Boolean(image)} />}
+          <canvas
+            id="display-canvas"
+            ref={canvasRef}
+            hidden={!hasCanvas}
+            className={cx('block', tool === 'eraser' && 'cursor-cell', tool === 'crop' && 'cursor-crosshair')}
+            style={{ width, height, imageRendering: pixel ? 'pixelated' : 'auto' }}
+          />
+          {hasCanvas && viewMode === 'split' && !maskPreview && tool !== 'crop' && <SplitHandle canvasRef={canvasRef} onMove={draw} />}
+          {hasCanvas && tool === 'crop' && <CropOverlay />}
+          <div
+            aria-hidden
+            className="scan-line pointer-events-none absolute inset-x-0 top-0 z-[6] h-0.5 bg-npb shadow-[0_0_12px_2px_rgba(138,207,232,.8)]"
+          />
+        </motion.div>
       </div>
 
       <StageBgPicker />
@@ -314,7 +347,12 @@ function StageBgPicker() {
   const stageBg = useStudio((s) => s.stageBg);
   const setStageBg = useStudio((s) => s.setStageBg);
   return (
-    <div data-no-pan role="radiogroup" aria-label="Hintergrund der Arbeitsfläche" className="absolute top-3 left-3 z-[5] flex items-center gap-1.5 rounded-full bg-black/25 p-1.5 backdrop-blur-sm">
+    <div
+      data-no-pan
+      role="radiogroup"
+      aria-label="Hintergrund der Arbeitsfläche"
+      className="absolute top-3 left-3 z-[5] flex items-center gap-1.5 rounded-full bg-black/25 p-1.5 backdrop-blur-sm"
+    >
       {STAGE_BACKGROUNDS.map((b) => (
         <button
           key={b.value}
@@ -324,7 +362,10 @@ function StageBgPicker() {
           aria-label={b.label}
           title={b.label}
           onClick={() => setStageBg(b.value)}
-          className={cx('size-[18px] rounded-full border border-white/50 transition-transform hover:scale-110', stageBg === b.value && 'ring-2 ring-npb ring-offset-1 ring-offset-transparent')}
+          className={cx(
+            'size-[18px] rounded-full border border-white/50 transition-transform hover:scale-110',
+            stageBg === b.value && 'ring-2 ring-npb ring-offset-1 ring-offset-transparent'
+          )}
           style={{ background: b.color }}
         />
       ))}
@@ -352,8 +393,13 @@ function SplitHandle({ canvasRef, onMove }: { canvasRef: React.RefObject<HTMLCan
       aria-valuenow={Math.round(split * 100)}
       className="absolute inset-y-0 z-[7] -ml-3 w-6 cursor-ew-resize touch-none"
       style={{ left: `${split * 100}%` }}
-      onPointerDown={(e) => { e.stopPropagation(); (e.target as HTMLElement).setPointerCapture(e.pointerId); }}
-      onPointerMove={(e) => { if (e.buttons) update(e.clientX); }}
+      onPointerDown={(e) => {
+        e.stopPropagation();
+        (e.target as HTMLElement).setPointerCapture(e.pointerId);
+      }}
+      onPointerMove={(e) => {
+        if (e.buttons) update(e.clientX);
+      }}
       onKeyDown={(e) => {
         if (e.key === 'ArrowLeft') setView({ split: clamp(split - 0.02, 0, 1) });
         if (e.key === 'ArrowRight') setView({ split: clamp(split + 0.02, 0, 1) });

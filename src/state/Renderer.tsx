@@ -86,10 +86,13 @@ export function Renderer() {
       }
     };
 
-    const timer = window.setTimeout(() => {
-      if (inFlight.current !== null) pending.current = run;
-      else run();
-    }, state.pendingFit ? 0 : 48);
+    const timer = window.setTimeout(
+      () => {
+        if (inFlight.current !== null) pending.current = run;
+        else run();
+      },
+      state.pendingFit ? 0 : 48
+    );
     return () => window.clearTimeout(timer);
   }, [controls, preview, previewId, strokesVersion, useWorker]);
 

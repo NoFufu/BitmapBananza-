@@ -28,16 +28,24 @@ function ExportSection() {
   const run = async (key: string, fn: () => Promise<void> | void) => {
     setBusy(key);
     await new Promise((r) => setTimeout(r, 30));
-    try { await fn(); } finally { setBusy(null); }
+    try {
+      await fn();
+    } finally {
+      setBusy(null);
+    }
   };
 
   return (
     <Section id="export" title="Export">
       <div className="flex flex-wrap gap-x-4">
-        {CONTROL_DEFS.filter((d) => d.section === 'output').map((d) => <ControlField key={d.key} def={d} />)}
+        {CONTROL_DEFS.filter((d) => d.section === 'output').map((d) => (
+          <ControlField key={d.key} def={d} />
+        ))}
       </div>
 
-      <label htmlFor="export-mode" className={fieldLabel}>Auflösung</label>
+      <label htmlFor="export-mode" className={fieldLabel}>
+        Auflösung
+      </label>
       <select id="export-mode" className="field" value={exportMode} onChange={(e) => set({ exportMode: e.target.value as ExportMode })}>
         <option value="current">Aktuelle Vorschaugröße</option>
         <option value="2x">2x größer</option>
@@ -64,47 +72,95 @@ function ExportSection() {
           />
           <div className="mt-2.5 grid grid-cols-3">
             {[2048, 3000, 4096].map((w, i) => (
-              <Button key={w} variant="mini" className={`-ml-px first:ml-0 ${i === 0 ? 'rounded-r-none' : i === 2 ? 'rounded-l-none' : 'rounded-none'} ${customWidth === w ? '!border-ink !bg-ink !text-paper' : ''}`} onClick={() => set({ customWidth: w })}>{w}</Button>
+              <Button
+                key={w}
+                variant="mini"
+                className={`-ml-px first:ml-0 ${i === 0 ? 'rounded-r-none' : i === 2 ? 'rounded-l-none' : 'rounded-none'} ${customWidth === w ? '!border-ink !bg-ink !text-paper' : ''}`}
+                onClick={() => set({ customWidth: w })}
+              >
+                {w}
+              </Button>
             ))}
           </div>
         </>
       )}
 
-      <label htmlFor="export-name" className={fieldLabel}>Dateiname</label>
-      <input id="export-name" className="field" type="text" spellCheck={false} value={exportName} onChange={(e) => set({ exportName: e.target.value })} />
-      <Hint>{size ? `PNG mit ${size.width} × ${size.height} px, ${controls.transparent ? 'transparenter' : 'weißer'} Hintergrund.` : 'Lade ein Bild, um die Exportgröße zu sehen.'}</Hint>
+      <label htmlFor="export-name" className={fieldLabel}>
+        Dateiname
+      </label>
+      <input
+        id="export-name"
+        className="field"
+        type="text"
+        spellCheck={false}
+        value={exportName}
+        onChange={(e) => set({ exportName: e.target.value })}
+      />
+      <Hint>
+        {size
+          ? `PNG mit ${size.width} × ${size.height} px, ${controls.transparent ? 'transparenter' : 'weißer'} Hintergrund.`
+          : 'Lade ein Bild, um die Exportgröße zu sehen.'}
+      </Hint>
 
       <div className="mt-3 rounded-md border border-ink bg-paper px-3 py-2.5 text-[12px]">
         {check ? (
           <>
             <div className="grid grid-cols-[1fr_auto] items-center gap-x-2.5 gap-y-1.5">
-              <span className="text-muted">Auflösung</span><Pill tone={check.largeEnough ? 'good' : 'warn'}>{check.size.width} × {check.size.height}</Pill>
-              <span className="text-muted">Druckgröße bei 300 DPI</span><span className="text-right tabular">{check.cm.w.toFixed(1)} × {check.cm.h.toFixed(1)} cm</span>
-              <span className="text-muted">Transparenz</span><Pill tone={check.transparent ? 'good' : 'warn'}>{check.transparent ? 'Ja' : 'Nein'}</Pill>
-              <span className="text-muted">Nur Schwarz/Weiß</span><Pill tone={check.monochrome ? 'good' : 'warn'}>{check.monochrome ? 'Ja' : 'Prüfen'}</Pill>
-              <span className="text-muted">Farbdeckung</span><Pill tone={check.coverage <= 72 ? 'good' : 'warn'}>{check.coverage}%</Pill>
-              <span className="text-muted">Kleinste Insel</span><Pill tone={!check.minClusterMm || check.minClusterMm >= 0.22 ? 'good' : 'warn'}>{check.minClusterMm ? `${check.minClusterMm.toFixed(2)} mm` : 'n/a'}</Pill>
-              <span className="text-muted">Kante</span><Pill tone={check.edgeHasInk ? 'warn' : 'good'}>{check.edgeHasInk ? 'Kontakt' : 'frei'}</Pill>
+              <span className="text-muted">Auflösung</span>
+              <Pill tone={check.largeEnough ? 'good' : 'warn'}>
+                {check.size.width} × {check.size.height}
+              </Pill>
+              <span className="text-muted">Druckgröße bei 300 DPI</span>
+              <span className="text-right tabular">
+                {check.cm.w.toFixed(1)} × {check.cm.h.toFixed(1)} cm
+              </span>
+              <span className="text-muted">Transparenz</span>
+              <Pill tone={check.transparent ? 'good' : 'warn'}>{check.transparent ? 'Ja' : 'Nein'}</Pill>
+              <span className="text-muted">Nur Schwarz/Weiß</span>
+              <Pill tone={check.monochrome ? 'good' : 'warn'}>{check.monochrome ? 'Ja' : 'Prüfen'}</Pill>
+              <span className="text-muted">Farbdeckung</span>
+              <Pill tone={check.coverage <= 72 ? 'good' : 'warn'}>{check.coverage}%</Pill>
+              <span className="text-muted">Kleinste Insel</span>
+              <Pill tone={!check.minClusterMm || check.minClusterMm >= 0.22 ? 'good' : 'warn'}>
+                {check.minClusterMm ? `${check.minClusterMm.toFixed(2)} mm` : 'n/a'}
+              </Pill>
+              <span className="text-muted">Kante</span>
+              <Pill tone={check.edgeHasInk ? 'warn' : 'good'}>{check.edgeHasInk ? 'Kontakt' : 'frei'}</Pill>
             </div>
-            {check.warnings.length
-              ? <ul className="mt-2.5 list-disc space-y-1 border-t border-dashed border-hair pt-2.5 pl-4 text-[11.5px] leading-snug text-muted">{check.warnings.map((w) => <li key={w}>{w}</li>)}</ul>
-              : <p className="mt-2 text-[11.5px]">Sieht druckfertig aus.</p>}
+            {check.warnings.length ? (
+              <ul className="mt-2.5 list-disc space-y-1 border-t border-dashed border-hair pt-2.5 pl-4 text-[11.5px] leading-snug text-muted">
+                {check.warnings.map((w) => (
+                  <li key={w}>{w}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-2 text-[11.5px]">Sieht druckfertig aus.</p>
+            )}
           </>
         ) : (
-          <div className="flex items-center justify-between"><span className="text-muted">Druck-Check</span><Pill tone="warn">Kein Bild</Pill></div>
+          <div className="flex items-center justify-between">
+            <span className="text-muted">Druck-Check</span>
+            <Pill tone="warn">Kein Bild</Pill>
+          </div>
         )}
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-1.5">
-        <Button variant="line" className="text-[12.5px]" disabled={!hasImage || busy !== null} onClick={() => run('zip', exportPack)}>{busy === 'zip' ? 'Packe …' : 'ZIP-Paket'}</Button>
-        <Button variant="line" className="text-[12.5px]" disabled={!hasImage || busy !== null} onClick={() => run('svg', exportSVG)}>SVG</Button>
+        <Button variant="line" className="text-[12.5px]" disabled={!hasImage || busy !== null} onClick={() => run('zip', exportPack)}>
+          {busy === 'zip' ? 'Packe …' : 'ZIP-Paket'}
+        </Button>
+        <Button variant="line" className="text-[12.5px]" disabled={!hasImage || busy !== null} onClick={() => run('svg', exportSVG)}>
+          SVG
+        </Button>
       </div>
       <Hint>Das Paket enthält PNG transparent, auf Schwarz und auf Weiß, Druckbericht und Einstellungen.</Hint>
     </Section>
   );
 }
 
-interface RenderedVariant extends VariantDefinition { canvas: HTMLCanvasElement }
+interface RenderedVariant extends VariantDefinition {
+  canvas: HTMLCanvasElement;
+}
 
 function VariantsSection() {
   const hasImage = useStudio((s) => Boolean(s.image));
@@ -120,7 +176,11 @@ function VariantsSection() {
     setStatus(`${count} Varianten werden gerendert …`);
     setTimeout(() => {
       const scale = Math.min(1, 520 / Math.max(s.preview!.width, s.preview!.height));
-      const source = createScaledSourceFromImage(s.preview!, Math.max(1, Math.round(s.preview!.width * scale)), Math.max(1, Math.round(s.preview!.height * scale)));
+      const source = createScaledSourceFromImage(
+        s.preview!,
+        Math.max(1, Math.round(s.preview!.width * scale)),
+        Math.max(1, Math.round(s.preview!.height * scale))
+      );
       const base = document.createElement('canvas');
       base.width = processed.canvas!.width;
       base.height = processed.canvas!.height;
@@ -136,16 +196,24 @@ function VariantsSection() {
   return (
     <Section id="variants" title="Varianten vergleichen">
       <div className="mb-2.5 flex items-center gap-2.5">
-        <label htmlFor="variant-count" className="text-[12.5px]">Anzahl</label>
+        <label htmlFor="variant-count" className="text-[12.5px]">
+          Anzahl
+        </label>
         <select id="variant-count" className="field !w-20" value={count} onChange={(e) => setCount(Number(e.target.value))}>
-          <option value={3}>3</option><option value={4}>4</option><option value={6}>6</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+          <option value={6}>6</option>
         </select>
       </div>
-      <Button variant="line" disabled={!hasImage} onClick={generate}>Varianten rendern</Button>
+      <Button variant="line" disabled={!hasImage} onClick={generate}>
+        Varianten rendern
+      </Button>
       <p className="mt-2.5 text-[11.5px] text-muted">{status}</p>
       {items.length > 0 && (
         <div className="mt-2.5 grid grid-cols-2 gap-2.5">
-          {items.map((v) => <VariantCard key={v.name} variant={v} onClick={() => setCompare(v)} />)}
+          {items.map((v) => (
+            <VariantCard key={v.name} variant={v} onClick={() => setCompare(v)} />
+          ))}
         </div>
       )}
       {compare && baseline && (
@@ -156,7 +224,10 @@ function VariantsSection() {
           leftLabel="Variante"
           rightLabel="Aktuell"
           onClose={() => setCompare(null)}
-          onApply={() => { useStudio.getState().setControls(controlsFromPreset(compare.preset) as Controls); setCompare(null); }}
+          onApply={() => {
+            useStudio.getState().setControls(controlsFromPreset(compare.preset) as Controls);
+            setCompare(null);
+          }}
         />
       )}
     </Section>
@@ -188,15 +259,27 @@ function CropSection() {
   const set = useStudio((s) => s.set);
   return (
     <Section id="crop" title="Zuschneiden">
-      <label htmlFor="crop-aspect" className={fieldLabel}>Seitenverhältnis</label>
+      <label htmlFor="crop-aspect" className={fieldLabel}>
+        Seitenverhältnis
+      </label>
       <select id="crop-aspect" className="field" value={aspect} onChange={(e) => set({ cropAspect: e.target.value })}>
-        {CROP_ASPECTS.map((a) => <option key={a.value} value={a.value}>{a.value === 'free' ? 'Frei' : a.label}</option>)}
+        {CROP_ASPECTS.map((a) => (
+          <option key={a.value} value={a.value}>
+            {a.value === 'free' ? 'Frei' : a.label}
+          </option>
+        ))}
       </select>
       <div className="mt-2.5 grid grid-cols-2 gap-1.5">
-        <Button variant="mini" disabled={!hasImage} onClick={() => toggleTool('crop')}>{tool === 'crop' ? 'Rahmen ausblenden' : 'Rahmen setzen'}</Button>
-        <Button variant="mini" disabled={tool !== 'crop'} onClick={applyCrop}>Zuschneiden</Button>
+        <Button variant="mini" disabled={!hasImage} onClick={() => toggleTool('crop')}>
+          {tool === 'crop' ? 'Rahmen ausblenden' : 'Rahmen setzen'}
+        </Button>
+        <Button variant="mini" disabled={tool !== 'crop'} onClick={applyCrop}>
+          Zuschneiden
+        </Button>
       </div>
-      <Button variant="mini" className="mt-1.5" disabled={!cropped} onClick={resetCrop}>Original wiederherstellen</Button>
+      <Button variant="mini" className="mt-1.5" disabled={!cropped} onClick={resetCrop}>
+        Original wiederherstellen
+      </Button>
     </Section>
   );
 }
@@ -204,17 +287,26 @@ function CropSection() {
 function BatchSection() {
   const files = useStudio((s) => s.batchFiles);
   const [progress, setProgress] = useState<string | null>(null);
-  const names = files.slice(0, 3).map((f) => f.name).join(', ');
+  const names = files
+    .slice(0, 3)
+    .map((f) => f.name)
+    .join(', ');
   return (
     <Section id="batch" title="Stapel-Export">
       <p className="mb-2.5 text-[11.5px] text-muted">
-        {files.length ? `${files.length} Bild${files.length > 1 ? 'er' : ''}: ${names}${files.length > 3 ? ` und ${files.length - 3} weitere` : ''}` : 'Keine Bilder in der Warteschlange.'}
+        {files.length
+          ? `${files.length} Bild${files.length > 1 ? 'er' : ''}: ${names}${files.length > 3 ? ` und ${files.length - 3} weitere` : ''}`
+          : 'Keine Bilder in der Warteschlange.'}
       </p>
       <Button
         variant="line"
         disabled={files.length < 2 || progress !== null}
         onClick={async () => {
-          try { await exportBatch((done, total) => setProgress(`${done}/${total}`)); } finally { setProgress(null); }
+          try {
+            await exportBatch((done, total) => setProgress(`${done}/${total}`));
+          } finally {
+            setProgress(null);
+          }
         }}
       >
         {progress ? `Bild ${progress} …` : 'Alle als ZIP exportieren'}
@@ -232,7 +324,9 @@ function PerformanceSection() {
   const set = useStudio((s) => s.set);
   return (
     <Section id="performance" title="Vorschau-Leistung">
-      <label htmlFor="preview-quality" className={fieldLabel}>Vorschauqualität</label>
+      <label htmlFor="preview-quality" className={fieldLabel}>
+        Vorschauqualität
+      </label>
       <select id="preview-quality" className="field" value={quality} onChange={(e) => setPreviewQuality(e.target.value as PreviewQuality)}>
         <option value="fast">Schnell (1100 px)</option>
         <option value="balanced">Ausgewogen (1800 px)</option>
@@ -250,7 +344,10 @@ function PerformanceSection() {
 
 export function RightPanel() {
   return (
-    <aside aria-label="Export und Workflow" className="scrollbar-thin min-h-0 overflow-y-auto overflow-x-hidden border-l border-ink bg-panel pb-6 max-[900px]:overflow-visible max-[900px]:border-t max-[900px]:border-l-0">
+    <aside
+      aria-label="Export und Workflow"
+      className="scrollbar-thin min-h-0 overflow-y-auto overflow-x-hidden border-l border-ink bg-panel pb-6 max-[900px]:overflow-visible max-[900px]:border-t max-[900px]:border-l-0"
+    >
       <ExportSection />
       <VariantsSection />
       <CropSection />

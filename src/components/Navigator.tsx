@@ -17,8 +17,17 @@ export function Navigator() {
   const layout = () => {
     const src = processed.canvas!;
     const ratio = src.width / src.height;
-    let w = W, h = H, x = 0, y = 0;
-    if (ratio > W / H) { h = W / ratio; y = (H - h) / 2; } else { w = H * ratio; x = (W - w) / 2; }
+    let w = W,
+      h = H,
+      x = 0,
+      y = 0;
+    if (ratio > W / H) {
+      h = W / ratio;
+      y = (H - h) / 2;
+    } else {
+      w = H * ratio;
+      x = (W - w) / 2;
+    }
     return { x, y, w, h };
   };
 
@@ -69,8 +78,13 @@ export function Navigator() {
         width={W}
         height={H}
         className="block h-[100px] w-[156px] cursor-pointer rounded-[3px]"
-        onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); panTo(e); }}
-        onPointerMove={(e) => { if (e.buttons) panTo(e); }}
+        onPointerDown={(e) => {
+          e.currentTarget.setPointerCapture(e.pointerId);
+          panTo(e);
+        }}
+        onPointerMove={(e) => {
+          if (e.buttons) panTo(e);
+        }}
       />
     </div>
   );

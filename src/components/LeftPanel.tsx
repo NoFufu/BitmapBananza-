@@ -1,6 +1,13 @@
 import { RotateCcw } from 'lucide-react';
 import {
-  CONTROL_DEFS, EDGE_PRESETS, SECTIONS, STRUCTURES, getStructure, sectionChanged, withStructure, type SectionId
+  CONTROL_DEFS,
+  EDGE_PRESETS,
+  SECTIONS,
+  STRUCTURES,
+  getStructure,
+  sectionChanged,
+  withStructure,
+  type SectionId
 } from '../lib/controls';
 import { useStudio } from '../state/store';
 import { ControlField } from './ControlField';
@@ -9,7 +16,13 @@ import { Section } from './Section';
 import { Button, Hint, Segmented } from './ui';
 
 function Fields({ section }: { section: SectionId }) {
-  return <>{CONTROL_DEFS.filter((d) => d.section === section).map((d) => <ControlField key={d.key} def={d} />)}</>;
+  return (
+    <>
+      {CONTROL_DEFS.filter((d) => d.section === section).map((d) => (
+        <ControlField key={d.key} def={d} />
+      ))}
+    </>
+  );
 }
 
 function SubHead({ children }: { children: string }) {
@@ -89,7 +102,13 @@ function EraserControls() {
   return (
     <>
       <label className="mt-2.5 flex cursor-pointer items-center gap-2 text-[12.5px]">
-        <input type="checkbox" className="size-4 accent-ink" disabled={!hasImage} checked={tool === 'eraser'} onChange={(e) => setTool(e.target.checked ? 'eraser' : 'none')} />
+        <input
+          type="checkbox"
+          className="size-4 accent-ink"
+          disabled={!hasImage}
+          checked={tool === 'eraser'}
+          onChange={(e) => setTool(e.target.checked ? 'eraser' : 'none')}
+        />
         Radierer aktiv <kbd>E</kbd>
       </label>
       {tool === 'eraser' && (
@@ -110,12 +129,22 @@ function EraserControls() {
         </>
       )}
       <label className="mt-2.5 flex cursor-pointer items-center gap-2 text-[12.5px]">
-        <input type="checkbox" className="size-4 accent-ink" disabled={!hasImage} checked={maskPreview} onChange={(e) => set({ maskPreview: e.target.checked })} />
+        <input
+          type="checkbox"
+          className="size-4 accent-ink"
+          disabled={!hasImage}
+          checked={maskPreview}
+          onChange={(e) => set({ maskPreview: e.target.checked })}
+        />
         Maske anzeigen <kbd>M</kbd>
       </label>
       <div className="mt-2.5 grid grid-cols-2 gap-1.5">
-        <Button variant="mini" disabled={!strokes} onClick={clearStrokes}>Radierung löschen</Button>
-        <Button variant="mini" disabled={!hasImage} onClick={applyShirtReady}>Shirt-fertig</Button>
+        <Button variant="mini" disabled={!strokes} onClick={clearStrokes}>
+          Radierung löschen
+        </Button>
+        <Button variant="mini" disabled={!hasImage} onClick={applyShirtReady}>
+          Shirt-fertig
+        </Button>
       </div>
       <Hint>Shirt-fertig setzt transparenten Hintergrund, gerissene Kante und 4096 px Export.</Hint>
     </>
@@ -127,7 +156,10 @@ export function LeftPanel() {
   const resetControls = useStudio((s) => s.resetControls);
   const pixel = controls.graphicMode === 'pixelBitmap';
   return (
-    <aside aria-label="Looks und Effekte" className="scrollbar-thin min-h-0 overflow-y-auto overflow-x-hidden border-r border-ink bg-panel pb-6 max-[900px]:overflow-visible max-[900px]:border-r-0">
+    <aside
+      aria-label="Looks und Effekte"
+      className="scrollbar-thin min-h-0 overflow-y-auto overflow-x-hidden border-r border-ink bg-panel pb-6 max-[900px]:overflow-visible max-[900px]:border-r-0"
+    >
       <LooksPanel />
       {SECTIONS.map((section) => (
         <Section
@@ -135,7 +167,11 @@ export function LeftPanel() {
           id={section.id}
           title={section.title}
           subtitle={section.subtitle}
-          changed={section.id === 'structure' ? getStructure(controls) !== 'flat' || sectionChanged(controls, 'structure') : sectionChanged(controls, section.id)}
+          changed={
+            section.id === 'structure'
+              ? getStructure(controls) !== 'flat' || sectionChanged(controls, 'structure')
+              : sectionChanged(controls, section.id)
+          }
         >
           {section.id === 'basics' && <AutoThreshold />}
           {section.id === 'structure' && <StructurePicker />}

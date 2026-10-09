@@ -7,7 +7,15 @@ import { Button } from './ui';
  * Before/after comparison in the spirit of Aceternity's "Compare": the divider
  * follows the pointer while hovering, and can be dragged or moved with arrow keys.
  */
-export function CompareModal({ title, left, right, leftLabel, rightLabel, onClose, onApply }: {
+export function CompareModal({
+  title,
+  left,
+  right,
+  leftLabel,
+  rightLabel,
+  onClose,
+  onApply
+}: {
   title: string;
   left: HTMLCanvasElement;
   right: HTMLCanvasElement;
@@ -54,7 +62,9 @@ export function CompareModal({ title, left, right, leftLabel, rightLabel, onClos
       className="fixed inset-0 z-[60] flex items-center justify-center bg-[rgba(20,32,27,.6)] p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      onPointerDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      onPointerDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
     >
       <motion.div
         initial={{ y: 12, scale: 0.98 }}
@@ -65,8 +75,12 @@ export function CompareModal({ title, left, right, leftLabel, rightLabel, onClos
         <div className="flex items-center justify-between gap-2.5 px-1">
           <strong className="text-[15px] font-extrabold font-compact">{title}</strong>
           <div className="flex gap-1.5">
-            <Button variant="mini" className="!w-auto !border-ink !bg-ink !text-paper" onClick={onApply}>Variante übernehmen</Button>
-            <Button variant="mini" className="!w-auto" onClick={onClose}>Schließen</Button>
+            <Button variant="mini" className="!w-auto !border-ink !bg-ink !text-paper" onClick={onApply}>
+              Variante übernehmen
+            </Button>
+            <Button variant="mini" className="!w-auto" onClick={onClose}>
+              Schließen
+            </Button>
           </div>
         </div>
         <div
@@ -79,8 +93,12 @@ export function CompareModal({ title, left, right, leftLabel, rightLabel, onClos
             <canvas ref={leftRef} className="absolute inset-0 size-full object-contain" />
           </div>
           <span className="pointer-events-none absolute inset-y-0 w-0.5 bg-npb" style={{ left: `${pos * 100}%` }} />
-          <span className="absolute bottom-2.5 left-2.5 rounded-full bg-paper px-2 py-0.5 text-[11.5px] font-semibold ring-1 ring-ink">{leftLabel}</span>
-          <span className="absolute right-2.5 bottom-2.5 rounded-full bg-paper px-2 py-0.5 text-[11.5px] font-semibold ring-1 ring-ink">{rightLabel}</span>
+          <span className="absolute bottom-2.5 left-2.5 rounded-full bg-paper px-2 py-0.5 text-[11.5px] font-semibold ring-1 ring-ink">
+            {leftLabel}
+          </span>
+          <span className="absolute right-2.5 bottom-2.5 rounded-full bg-paper px-2 py-0.5 text-[11.5px] font-semibold ring-1 ring-ink">
+            {rightLabel}
+          </span>
         </div>
         <p className="px-1 text-[11.5px] text-muted">Maus über das Bild bewegen oder Pfeiltasten nutzen, um zu vergleichen.</p>
       </motion.div>

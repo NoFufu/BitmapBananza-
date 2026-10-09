@@ -33,7 +33,9 @@ export function ShortcutsDialog() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onPointerDown={(e) => { if (e.target === e.currentTarget) close(); }}
+          onPointerDown={(e) => {
+            if (e.target === e.currentTarget) close();
+          }}
         >
           <motion.div
             role="dialog"
@@ -45,17 +47,32 @@ export function ShortcutsDialog() {
             className="w-[min(520px,100%)] rounded-xl border border-ink bg-paper px-4.5 pt-4 pb-4.5"
           >
             <div className="mb-2.5 flex items-center justify-between">
-              <h2 id="shortcuts-title" className="text-[16px] font-extrabold font-compact">Tastenkürzel</h2>
-              <button type="button" autoFocus onClick={close} aria-label="Schließen" className="grid size-8 place-items-center rounded-md hover:bg-panel"><X size={17} /></button>
+              <h2 id="shortcuts-title" className="text-[16px] font-extrabold font-compact">
+                Tastenkürzel
+              </h2>
+              <button
+                type="button"
+                autoFocus
+                onClick={close}
+                aria-label="Schließen"
+                className="grid size-8 place-items-center rounded-md hover:bg-panel"
+              >
+                <X size={17} />
+              </button>
             </div>
             <dl className="grid grid-cols-[auto_1fr] items-center gap-x-4.5 gap-y-2">
               {SHORTCUTS.map(([keys, label]) => (
                 <div key={label} className="contents">
-                  <dt className="flex items-center gap-1">{keys.map((k) => <kbd key={k}>{k}</kbd>)}</dt>
+                  <dt className="flex items-center gap-1">
+                    {keys.map((k) => (
+                      <kbd key={k}>{k}</kbd>
+                    ))}
+                  </dt>
                   <dd className="m-0">{label}</dd>
                 </div>
               ))}
-              <dt className="text-[12px] text-muted">Doppelklick</dt><dd className="m-0">auf einen Regler setzt ihn zurück</dd>
+              <dt className="text-[12px] text-muted">Doppelklick</dt>
+              <dd className="m-0">auf einen Regler setzt ihn zurück</dd>
             </dl>
           </motion.div>
         </motion.div>
