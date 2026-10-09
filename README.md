@@ -1,19 +1,40 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/logo-dark.svg" />
-    <img src="docs/logo.svg" alt="LBB" width="180" />
+    <img src="docs/logo.svg" alt="LBB" width="200" />
   </picture>
 </p>
 
 <h1 align="center">Levi's Bitmap Bananza</h1>
 
 <p align="center">
-  Fotos im Browser in druckfertige Schwarz-Weiß-Grafiken verwandeln.<br />
-  <a href="https://lbbstudio.pages.dev/"><strong>lbbstudio.pages.dev</strong></a>
+  <b>Fotos rein, druckfertige Schwarz-Weiß-Grafik raus.</b><br />
+  Dithering, Halftone, Xerox-Dreck und Shirt-Kanten, direkt im Browser.
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/desktop.png" alt="Bitmap Bananza auf dem Desktop" width="780" />
+  <a href="https://lbbstudio.pages.dev/"><img src="https://img.shields.io/badge/Jetzt_ausprobieren-lbbstudio.pages.dev-000000?style=for-the-badge" alt="Jetzt ausprobieren" /></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19-000000?logo=react&logoColor=white" alt="React 19" />
+  <img src="https://img.shields.io/badge/TypeScript-5-000000?logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Vite-8-000000?logo=vite&logoColor=white" alt="Vite 8" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-000000?logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4" />
+  <img src="https://img.shields.io/badge/Cloudflare_Pages-deployed-000000?logo=cloudflarepages&logoColor=white" alt="Cloudflare Pages" />
+  <img src="https://img.shields.io/badge/100%25-im_Browser-000000" alt="Läuft komplett im Browser" />
+</p>
+
+<p align="center">
+  <img src="docs/banner.jpg" alt="Ein Foto in sechs Looks: Original, Clean Photo, Newspaper, Dirty Xerox, Detail Ink, Pixel Bitmap" />
+</p>
+
+<p align="center">
+  <a href="#was-es-kann">Was es kann</a> ·
+  <a href="#beispiele">Beispiele</a> ·
+  <a href="#oberfläche">Oberfläche</a> ·
+  <a href="#lokal-starten">Lokal starten</a> ·
+  <a href="#tastenkürzel">Tastenkürzel</a>
 </p>
 
 ## Was es kann
@@ -57,6 +78,10 @@ Ein Foto, acht Looks. Jeder Look ist nur ein Startpunkt, danach lässt sich jede
 <p align="center"><sub>Links Detail Ink, rechts Newspaper. Alle Bilder sind direkt mit der Engine aus den Beispielfotos der App gerendert.</sub></p>
 
 ## Oberfläche
+
+<p align="center">
+  <img src="docs/screenshots/desktop.png" alt="Bitmap Bananza auf dem Desktop" width="780" />
+</p>
 
 <p align="center">
   <img src="docs/screenshots/suche.png" alt="Regler-Suche mit Strg K" width="520" />
