@@ -17,16 +17,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React-19-000000?logo=react&logoColor=white" alt="React 19" />
-  <img src="https://img.shields.io/badge/TypeScript-5-000000?logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Vite-8-000000?logo=vite&logoColor=white" alt="Vite 8" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-4-000000?logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4" />
-  <img src="https://img.shields.io/badge/Cloudflare_Pages-deployed-000000?logo=cloudflarepages&logoColor=white" alt="Cloudflare Pages" />
-  <img src="https://img.shields.io/badge/100%25-in_your_browser-000000" alt="Runs entirely in the browser" />
-</p>
-
-<p align="center">
-  <img src="docs/banner.png" alt="Six results from Bitmap Bananza: a cat in Detail Ink, an astronaut in Detail Ink, an espresso as a hard poster, a rocket at night, an astronaut in Atkinson dither and in chunky pixels" />
+  <img src="docs/hero.png" width="720" alt="A cat photo on the left and the same photo turned into a black and white ink graphic by Bitmap Bananza on the right" />
 </p>
 
 <p align="center">
@@ -252,6 +243,15 @@ Especially useful for logos and scans: remove small specks, fill holes, make lin
 
 ## Run it locally
 
+<p>
+  <img src="https://img.shields.io/badge/React-19-000000?logo=react&logoColor=white" alt="React 19" />
+  <img src="https://img.shields.io/badge/TypeScript-5-000000?logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Vite-8-000000?logo=vite&logoColor=white" alt="Vite 8" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-000000?logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4" />
+  <img src="https://img.shields.io/badge/Cloudflare_Pages-deployed-000000?logo=cloudflarepages&logoColor=white" alt="Cloudflare Pages" />
+  <img src="https://img.shields.io/badge/100%25-in_your_browser-000000" alt="Runs entirely in the browser" />
+</p>
+
 You need Node 22 (see `.nvmrc`).
 
 ```sh
@@ -280,7 +280,7 @@ src/
   state/         Zustand store (controls, history, view, tools), renderer, shortcuts
   components/    UI: looks, controls, stage, dock, crop, search, compare, export
 public/          favicon and sample photos
-docs/            logo, banner, screenshots and example images for this README
+docs/            logo, header image, screenshots and example images for this README
 ```
 
 Every control is defined once in `src/lib/controls.ts`. Sliders, search, the "changed" dots and reset all read from there, so a new control only needs one entry.
