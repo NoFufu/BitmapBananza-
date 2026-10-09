@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/hero.png" width="720" alt="A cat photo on the left and the same photo turned into a black and white ink graphic by Bitmap Bananza on the right" />
+  <img src="docs/hero.png" width="720" alt="A colour portrait on the left and the same photo turned into a black and white ink graphic by Bitmap Bananza on the right" />
 </p>
 
 <p align="center">
@@ -60,7 +60,7 @@ Each look sets every control at once and works as a starting point. The small pi
     <td align="center"><img src="docs/examples/look-hardPoster.jpg" alt="Hard Poster" width="400" /><br /><b>Hard Poster</b><br /><sub>Big bold areas</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/examples/look-highDetailInk.jpg" alt="Detail Ink" width="400" /><br /><b>Detail Ink</b><br /><sub>Every whisker and hair</sub></td>
+    <td align="center"><img src="docs/examples/look-highDetailInk.jpg" alt="Detail Ink" width="400" /><br /><b>Detail Ink</b><br /><sub>Every strand of hair</sub></td>
     <td align="center"><img src="docs/examples/look-softNewspaper.jpg" alt="Newspaper" width="400" /><br /><b>Newspaper</b><br /><sub>Fine dot screen</sub></td>
   </tr>
   <tr>
@@ -102,8 +102,8 @@ Results shown in one ink on a shirt colour, the way they come off a screen print
 <table>
   <tr>
     <td align="center"><img src="docs/examples/shirt-1.png" alt="White ink on charcoal" width="270" /><br /><b>White ink on charcoal</b><br /><sub>Detail Ink, inverted</sub></td>
-    <td align="center"><img src="docs/examples/shirt-2.png" alt="Black ink on natural" width="270" /><br /><b>Black ink on natural</b><br /><sub>Detail Ink</sub></td>
-    <td align="center"><img src="docs/examples/shirt-3.png" alt="White ink on red" width="270" /><br /><b>White ink on red</b><br /><sub>Hard Poster, inverted</sub></td>
+    <td align="center"><img src="docs/examples/shirt-2.png" alt="Black ink on natural" width="270" /><br /><b>Black ink on natural</b><br /><sub>Logo Cleanup</sub></td>
+    <td align="center"><img src="docs/examples/shirt-3.png" alt="White ink on red" width="270" /><br /><b>White ink on red</b><br /><sub>Hard Poster</sub></td>
   </tr>
 </table>
 
@@ -119,7 +119,7 @@ Bitmap Bananza enlarges the photo first and only then converts it, so even a sma
   </tr>
 </table>
 
-<sub>All examples are rendered with the app's own engine. Photos: astronaut Eileen Collins (NASA, public domain), cat Chelsea by Stefan van der Walt (CC0), espresso by Rachel Michetti (CC0), Falcon 9 launch (SpaceX, public domain), all taken from the scikit-image sample data.</sub>
+<sub>All examples are rendered with the app's own engine. Example photos are used with permission, all rights stay with their owners.</sub>
 
 ## Every option
 
