@@ -26,7 +26,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/banner.jpg" alt="One photo in six looks: original, Clean Photo, Newspaper, Dirty Xerox, Detail Ink, Pixel Bitmap" />
+  <img src="docs/banner.png" alt="Six results from Bitmap Bananza: a cat in Detail Ink, an astronaut in Detail Ink, an espresso as a hard poster, a rocket at night, an astronaut in Atkinson dither and in chunky pixels" />
 </p>
 
 <p align="center">
@@ -59,34 +59,76 @@ Bitmap Bananza turns any photo into a pure black and white graphic that is ready
 
 ## Examples
 
-One photo, eight looks. Every look is just a starting point: each control can be tuned further afterwards.
+### Eight looks, one click each
+
+Each look sets every control at once and works as a starting point. The small picture in the corner is the photo that went in.
 
 <table>
   <tr>
-    <td align="center"><img src="docs/looks/original.jpg" alt="Original" width="240" /><br /><b>Original</b><br /><sub>The photo</sub></td>
-    <td align="center"><img src="docs/looks/cleanPhoto.png" alt="Clean Photo" width="240" /><br /><b>Clean Photo</b><br /><sub>Photo, cleanly separated</sub></td>
-    <td align="center"><img src="docs/looks/hardPoster.png" alt="Hard Poster" width="240" /><br /><b>Hard Poster</b><br /><sub>Big bold areas</sub></td>
+    <td align="center"><img src="docs/examples/look-cleanPhoto.jpg" alt="Clean Photo" width="400" /><br /><b>Clean Photo</b><br /><sub>Photo, cleanly separated</sub></td>
+    <td align="center"><img src="docs/examples/look-hardPoster.jpg" alt="Hard Poster" width="400" /><br /><b>Hard Poster</b><br /><sub>Big bold areas</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/looks/highDetailInk.png" alt="Detail Ink" width="240" /><br /><b>Detail Ink</b><br /><sub>Edges and fine detail</sub></td>
-    <td align="center"><img src="docs/looks/softNewspaper.png" alt="Newspaper" width="240" /><br /><b>Newspaper</b><br /><sub>Fine dot screen</sub></td>
-    <td align="center"><img src="docs/looks/dirtyXerox.png" alt="Dirty Xerox" width="240" /><br /><b>Dirty Xerox</b><br /><sub>Photocopier grit</sub></td>
+    <td align="center"><img src="docs/examples/look-highDetailInk.jpg" alt="Detail Ink" width="400" /><br /><b>Detail Ink</b><br /><sub>Every whisker and hair</sub></td>
+    <td align="center"><img src="docs/examples/look-softNewspaper.jpg" alt="Newspaper" width="400" /><br /><b>Newspaper</b><br /><sub>Fine dot screen</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/looks/shirtPrintGraphic.png" alt="Shirt Print" width="240" /><br /><b>Shirt Print</b><br /><sub>Transparent, soft edge</sub></td>
-    <td align="center"><img src="docs/looks/logoCleanup.png" alt="Logo Cleanup" width="240" /><br /><b>Logo Cleanup</b><br /><sub>Scan to clean solid shapes</sub></td>
-    <td align="center"><img src="docs/looks/pixelClassic.png" alt="Pixel Bitmap" width="240" /><br /><b>Pixel Bitmap</b><br /><sub>Chunky pixel blocks</sub></td>
+    <td align="center"><img src="docs/examples/look-dirtyXerox.jpg" alt="Dirty Xerox" width="400" /><br /><b>Dirty Xerox</b><br /><sub>Photocopier grit</sub></td>
+    <td align="center"><img src="docs/examples/look-shirtPrintGraphic.jpg" alt="Shirt Print" width="400" /><br /><b>Shirt Print</b><br /><sub>Textured ink for fabric</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/examples/look-logoCleanup.jpg" alt="Logo Cleanup" width="400" /><br /><b>Logo Cleanup</b><br /><sub>Clean solid shapes</sub></td>
+    <td align="center"><img src="docs/examples/look-pixelClassic.jpg" alt="Pixel Bitmap" width="400" /><br /><b>Pixel Bitmap</b><br /><sub>Chunky pixel blocks</sub></td>
   </tr>
 </table>
 
-### Before and after
+### One photo, endless ways to draw grey
 
-<p align="center">
-  <img src="docs/beispiele/detail-ink.jpg" alt="Before and after with Detail Ink" width="420" />
-  &nbsp;
-  <img src="docs/beispiele/newspaper.jpg" alt="Before and after with Newspaper" width="420" />
-</p>
-<p align="center"><sub>Left: Detail Ink. Right: Newspaper. All images are rendered straight from the app's own engine using its sample photos.</sub></p>
+The same portrait through five of the 26 dither algorithms and four of the 16 halftone shapes. Every one of them has its own sliders on top.
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/examples/structure-original.jpg" alt="Original" width="270" /><br /><b>Original</b><br /><sub>The photo</sub></td>
+    <td align="center"><img src="docs/examples/structure-floyd.png" alt="Floyd-Steinberg" width="270" /><br /><b>Floyd-Steinberg</b><br /><sub>Error diffusion</sub></td>
+    <td align="center"><img src="docs/examples/structure-atkinson.png" alt="Atkinson" width="270" /><br /><b>Atkinson</b><br /><sub>Classic Mac look</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/examples/structure-bayer8.png" alt="Bayer 8×8" width="270" /><br /><b>Bayer 8×8</b><br /><sub>Ordered dither</sub></td>
+    <td align="center"><img src="docs/examples/structure-bluenoise.png" alt="Blue Noise" width="270" /><br /><b>Blue Noise</b><br /><sub>Even speckle</sub></td>
+    <td align="center"><img src="docs/examples/structure-dots.png" alt="Round Dots" width="270" /><br /><b>Round Dots</b><br /><sub>Halftone screen</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/examples/structure-wave.png" alt="Wave Lines" width="270" /><br /><b>Wave Lines</b><br /><sub>Halftone screen</sub></td>
+    <td align="center"><img src="docs/examples/structure-cross.png" alt="Cross Hatch" width="270" /><br /><b>Cross Hatch</b><br /><sub>Halftone screen</sub></td>
+    <td align="center"><img src="docs/examples/structure-diag.png" alt="Diagonal Lines" width="270" /><br /><b>Diagonal Lines</b><br /><sub>Halftone screen</sub></td>
+  </tr>
+</table>
+
+### Made for print
+
+Results shown in one ink on a shirt colour, the way they come off a screen print. Invert flips the artwork for white ink on dark fabric.
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/examples/shirt-1.png" alt="White ink on charcoal" width="270" /><br /><b>White ink on charcoal</b><br /><sub>Detail Ink, inverted</sub></td>
+    <td align="center"><img src="docs/examples/shirt-2.png" alt="Black ink on natural" width="270" /><br /><b>Black ink on natural</b><br /><sub>Detail Ink</sub></td>
+    <td align="center"><img src="docs/examples/shirt-3.png" alt="White ink on red" width="270" /><br /><b>White ink on red</b><br /><sub>Hard Poster, inverted</sub></td>
+  </tr>
+</table>
+
+### Upscaling that stays sharp
+
+Bitmap Bananza enlarges the photo first and only then converts it, so even a small source turns into crisp detail instead of blocky pixels.
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/examples/up-orig.jpg" alt="Original" width="270" /><br /><b>Original</b><br /><sub>A tiny 150 × 100 px crop</sub></td>
+    <td align="center"><img src="docs/examples/up-naive.png" alt="Converted, then enlarged" width="270" /><br /><b>Converted, then enlarged</b><br /><sub>Blocky and soft</sub></td>
+    <td align="center"><img src="docs/examples/up-lbb.png" alt="Bitmap Bananza 4×" width="270" /><br /><b>Bitmap Bananza 4×</b><br /><sub>Re-rendered at full size</sub></td>
+  </tr>
+</table>
+
+<sub>All examples are rendered with the app's own engine. Photos: astronaut Eileen Collins (NASA, public domain), cat Chelsea by Stefan van der Walt (CC0), espresso by Rachel Michetti (CC0), Falcon 9 launch (SpaceX, public domain), all taken from the scikit-image sample data.</sub>
 
 ## Every option
 
@@ -238,7 +280,7 @@ src/
   state/         Zustand store (controls, history, view, tools), renderer, shortcuts
   components/    UI: looks, controls, stage, dock, crop, search, compare, export
 public/          favicon and sample photos
-docs/            logo, screenshots and example images for this README
+docs/            logo, banner, screenshots and example images for this README
 ```
 
 Every control is defined once in `src/lib/controls.ts`. Sliders, search, the "changed" dots and reset all read from there, so a new control only needs one entry.
