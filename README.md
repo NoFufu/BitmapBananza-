@@ -8,12 +8,12 @@
 <h1 align="center">Levi's Bitmap Bananza</h1>
 
 <p align="center">
-  <b>Fotos rein, druckfertige Schwarz-Weiß-Grafik raus.</b><br />
-  Dithering, Halftone, Xerox-Dreck und Shirt-Kanten, direkt im Browser.
+  <b>Photo in, print-ready black &amp; white graphic out.</b><br />
+  Dithering, halftone, xerox grit and shirt-ready edges, right in your browser.
 </p>
 
 <p align="center">
-  <a href="https://lbbstudio.pages.dev/"><img src="https://img.shields.io/badge/Jetzt_ausprobieren-lbbstudio.pages.dev-000000?style=for-the-badge" alt="Jetzt ausprobieren" /></a>
+  <a href="https://lbbstudio.pages.dev/"><img src="https://img.shields.io/badge/Try_it_now-lbbstudio.pages.dev-000000?style=for-the-badge" alt="Try it now" /></a>
 </p>
 
 <p align="center">
@@ -22,130 +22,250 @@
   <img src="https://img.shields.io/badge/Vite-8-000000?logo=vite&logoColor=white" alt="Vite 8" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-000000?logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4" />
   <img src="https://img.shields.io/badge/Cloudflare_Pages-deployed-000000?logo=cloudflarepages&logoColor=white" alt="Cloudflare Pages" />
-  <img src="https://img.shields.io/badge/100%25-im_Browser-000000" alt="Läuft komplett im Browser" />
+  <img src="https://img.shields.io/badge/100%25-in_your_browser-000000" alt="Runs entirely in the browser" />
 </p>
 
 <p align="center">
-  <img src="docs/banner.jpg" alt="Ein Foto in sechs Looks: Original, Clean Photo, Newspaper, Dirty Xerox, Detail Ink, Pixel Bitmap" />
+  <img src="docs/banner.jpg" alt="One photo in six looks: original, Clean Photo, Newspaper, Dirty Xerox, Detail Ink, Pixel Bitmap" />
 </p>
 
 <p align="center">
-  <a href="#was-es-kann">Was es kann</a> ·
-  <a href="#beispiele">Beispiele</a> ·
-  <a href="#oberfläche">Oberfläche</a> ·
-  <a href="#lokal-starten">Lokal starten</a> ·
-  <a href="#tastenkürzel">Tastenkürzel</a>
+  <a href="#what-it-does">What it does</a> ·
+  <a href="#examples">Examples</a> ·
+  <a href="#every-option">Every option</a> ·
+  <a href="#export-and-upscaling">Export &amp; upscaling</a> ·
+  <a href="#run-it-locally">Run it locally</a> ·
+  <a href="#keyboard-shortcuts">Shortcuts</a>
 </p>
 
-## Was es kann
+## What it does
 
-- **Acht Looks** mit einem Klick: Clean Photo, Hard Poster, Detail Ink, Newspaper, Dirty Xerox, Shirt Print, Logo Cleanup und Pixel Bitmap
-- **Dithering, Halftone, Glyphen und Xerox-Dreck**, jeder Regler fein einstellbar
-- **Shirt-Kanten**: weiche oder raue Ränder, Weiß transparent, Druck-Check mit Farbdeckung und kleinster Insel
-- **Zuschneiden, Radierer, Vorher/Nachher-Split** und Varianten-Vergleich
-- **Export** als PNG, SVG oder ZIP-Paket (transparent, auf Schwarz, auf Weiß, Druckbericht), auch als Stapel
-- Läuft komplett im Browser, kein Bild verlässt das Gerät
+Bitmap Bananza turns any photo into a pure black and white graphic that is ready for screen printing, stickers, posters, zines or shirts. Pick a look with one click, then fine-tune it with more than 40 controls, 26 dither algorithms and 16 halftone shapes. Nothing is uploaded: every pixel is processed on your own device.
 
-## Beispiele
+- **8 one-click looks** that set every control at once, from clean photo cut-outs to dirty photocopier grit
+- **4 ways to draw grey tones:** solid areas, dithering, halftone screens or chunky pixels
+- **26 dither algorithms**, from Floyd-Steinberg and Atkinson to Bayer, blue noise, maze and worm textures
+- **16 halftone shapes** with size, angle, dot gain and jitter: round, newspaper, lines, waves, rings, stars and more
+- **Print wear effects:** rough edges, ink bleed, dust and missing spots, grain
+- **Edge fades for shirts:** soft, torn, crumbled, burned or grunge frame, with one-click presets
+- **Cleanup tools for logos and scans:** remove specks, fill holes, thicken or thin lines, smooth jagged stairs
+- **Upscaled export** up to 8000 px wide, re-rendered at full size so edges stay sharp
+- **PNG, SVG and ZIP export**, plus batch export for many photos at once
+- **Built-in print check:** print size at 300 DPI, ink coverage, smallest island in mm, edge contact, black/white only
+- **Crop, eraser and mask preview**, undo and redo for every change
+- **Compare variants** side by side and **save your own looks**
+- **Search every control** with <kbd>Ctrl</kbd>/<kbd>⌘</kbd> <kbd>K</kbd>
+- **Works on desktop and phone**, with pinch zoom on touch screens
 
-Ein Foto, acht Looks. Jeder Look ist nur ein Startpunkt, danach lässt sich jeder Regler weiter verstellen.
+## Examples
+
+One photo, eight looks. Every look is just a starting point: each control can be tuned further afterwards.
 
 <table>
   <tr>
-    <td align="center"><img src="docs/looks/original.jpg" alt="Original" width="240" /><br /><b>Original</b><br /><sub>Das Foto</sub></td>
-    <td align="center"><img src="docs/looks/cleanPhoto.png" alt="Clean Photo" width="240" /><br /><b>Clean Photo</b><br /><sub>Foto, sauber getrennt</sub></td>
-    <td align="center"><img src="docs/looks/hardPoster.png" alt="Hard Poster" width="240" /><br /><b>Hard Poster</b><br /><sub>Große Flächen</sub></td>
+    <td align="center"><img src="docs/looks/original.jpg" alt="Original" width="240" /><br /><b>Original</b><br /><sub>The photo</sub></td>
+    <td align="center"><img src="docs/looks/cleanPhoto.png" alt="Clean Photo" width="240" /><br /><b>Clean Photo</b><br /><sub>Photo, cleanly separated</sub></td>
+    <td align="center"><img src="docs/looks/hardPoster.png" alt="Hard Poster" width="240" /><br /><b>Hard Poster</b><br /><sub>Big bold areas</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/looks/highDetailInk.png" alt="Detail Ink" width="240" /><br /><b>Detail Ink</b><br /><sub>Kanten und Feinheiten</sub></td>
-    <td align="center"><img src="docs/looks/softNewspaper.png" alt="Newspaper" width="240" /><br /><b>Newspaper</b><br /><sub>Feines Punktraster</sub></td>
-    <td align="center"><img src="docs/looks/dirtyXerox.png" alt="Dirty Xerox" width="240" /><br /><b>Dirty Xerox</b><br /><sub>Kopierer-Dreck</sub></td>
+    <td align="center"><img src="docs/looks/highDetailInk.png" alt="Detail Ink" width="240" /><br /><b>Detail Ink</b><br /><sub>Edges and fine detail</sub></td>
+    <td align="center"><img src="docs/looks/softNewspaper.png" alt="Newspaper" width="240" /><br /><b>Newspaper</b><br /><sub>Fine dot screen</sub></td>
+    <td align="center"><img src="docs/looks/dirtyXerox.png" alt="Dirty Xerox" width="240" /><br /><b>Dirty Xerox</b><br /><sub>Photocopier grit</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/looks/shirtPrintGraphic.png" alt="Shirt Print" width="240" /><br /><b>Shirt Print</b><br /><sub>Transparent, weicher Rand</sub></td>
-    <td align="center"><img src="docs/looks/logoCleanup.png" alt="Logo Cleanup" width="240" /><br /><b>Logo Cleanup</b><br /><sub>Scan zu klarer Fläche</sub></td>
-    <td align="center"><img src="docs/looks/pixelClassic.png" alt="Pixel Bitmap" width="240" /><br /><b>Pixel Bitmap</b><br /><sub>Grobe Pixelblöcke</sub></td>
+    <td align="center"><img src="docs/looks/shirtPrintGraphic.png" alt="Shirt Print" width="240" /><br /><b>Shirt Print</b><br /><sub>Transparent, soft edge</sub></td>
+    <td align="center"><img src="docs/looks/logoCleanup.png" alt="Logo Cleanup" width="240" /><br /><b>Logo Cleanup</b><br /><sub>Scan to clean solid shapes</sub></td>
+    <td align="center"><img src="docs/looks/pixelClassic.png" alt="Pixel Bitmap" width="240" /><br /><b>Pixel Bitmap</b><br /><sub>Chunky pixel blocks</sub></td>
   </tr>
 </table>
 
-### Vorher und Nachher
+### Before and after
 
 <p align="center">
-  <img src="docs/beispiele/detail-ink.jpg" alt="Vorher und Nachher mit Detail Ink" width="420" />
+  <img src="docs/beispiele/detail-ink.jpg" alt="Before and after with Detail Ink" width="420" />
   &nbsp;
-  <img src="docs/beispiele/newspaper.jpg" alt="Vorher und Nachher mit Newspaper" width="420" />
+  <img src="docs/beispiele/newspaper.jpg" alt="Before and after with Newspaper" width="420" />
 </p>
-<p align="center"><sub>Links Detail Ink, rechts Newspaper. Alle Bilder sind direkt mit der Engine aus den Beispielfotos der App gerendert.</sub></p>
+<p align="center"><sub>Left: Detail Ink. Right: Newspaper. All images are rendered straight from the app's own engine using its sample photos.</sub></p>
 
-## Oberfläche
+## Every option
+
+The controls are grouped the way you usually work: overall tone first, then how grey is drawn, then wear, edges and cleanup. Controls that don't apply to the current mode are hidden, and a dot marks every control you changed. Double-click any slider to reset it.
+
+<details>
+<summary><b>Basics:</b> how much of the image turns black</summary>
+
+| Control      | What it does                                         |
+| ------------ | ---------------------------------------------------- |
+| Threshold    | The grey level where pixels flip from white to black |
+| Black amount | Pushes the whole image darker or lighter             |
+| Contrast     | Separates light and dark before conversion           |
+| Detail       | Keeps small features such as hair and freckles       |
+| Smoothing    | Calms noisy areas into cleaner shapes                |
+
+</details>
+
+<details>
+<summary><b>Structure:</b> solid, dither, halftone or pixel</summary>
+
+Pick how grey tones are drawn: **Solid** (clean black and white areas), **Dither** (tones as dot patterns or noise), **Halftone** (print screens like newspapers and screen printing) or **Pixel** (chunky blocks with adjustable pixel size).
+
+**26 dither algorithms**, with strength (0 to 250 %) and grain scale for the textured ones:
+
+| Group           | Algorithms                                                                                               |
+| --------------- | -------------------------------------------------------------------------------------------------------- |
+| Clean           | Hard Threshold                                                                                           |
+| Noisy           | Random Noise, Fine Salt Noise, Chunky Random Blocks, Blue Noise Speckle                                  |
+| Organic         | Organic Noise, Organic Worm Texture, Maze Texture                                                        |
+| Ordered         | Bayer 2×2, 4×4, 8×8, 16×16, Cluster Dot, Checker, Horizontal / Vertical / Diagonal Hatch, Scanline       |
+| Error diffusion | Floyd-Steinberg, False Floyd, Atkinson, Sierra Lite, Sierra Two Row, Burkes, Stucki, Jarvis-Judice-Ninke |
+
+**16 halftone shapes:** Round Dots, Tiny Newspaper Dots, Big Print Dots, Ellipse Dots, Line Screen, Vertical Lines, Diagonal Lines, Cross Hatch, Wave Lines, Square Dots, Diamond Dots, Ring Dots, Concentric Rings, Plus Marks, Brick Pattern, Star Dots. Each one comes with controls for screen size (3 to 50 px), angle (0 to 180°), dot gain (thicker or thinner dots), jitter and how strongly the screen is mixed in.
+
+</details>
+
+<details>
+<summary><b>Print look:</b> wear like screen print or a photocopier</summary>
+
+| Control                | What it does                            |
+| ---------------------- | --------------------------------------- |
+| Rough edges            | Frays the outlines of every shape       |
+| Ink bleed              | Lets the ink spread like on cheap paper |
+| Dust and missing spots | Adds specks and gaps like a worn screen |
+| Grain                  | Adds an overall film grain              |
+
+</details>
+
+<details>
+<summary><b>Edges and shirt:</b> fade out the image border, erase by hand</summary>
+
+- **Edge fade:** off, soft fade, torn, crumbled, burned / photocopier, or grunge frame, each with width, strength and raggedness
+- **Edge presets:** Soft, Torn and Heavy in one click
+- **Eraser** with adjustable brush size (6 to 140 px) and a **mask preview** that shows exactly what was erased
+- **Shirt ready** in one click: transparent background, torn edge and a 4096 px export
+
+</details>
+
+<details>
+<summary><b>Cleanup:</b> specks, holes and line weight</summary>
+
+Especially useful for logos and scans: remove small specks, fill holes, make lines thicker or thinner (up to 5 px each way) and smooth jagged stair-step edges.
+
+</details>
+
+<details>
+<summary><b>Pro settings:</b> fine control over the conversion</summary>
+
+| Control                                   | What it does                                                                                                       |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Processing mode                           | Standard, Simple B/W, Clean Cutout, Photo Poster, High Detail Ink, Screenprint Halftone, Dirty Xerox, Pixel Bitmap |
+| Threshold method                          | Fixed, automatic (Otsu), local per image area, or local with edges, plus local strength                            |
+| Emphasize outlines                        | Draws edges in ink                                                                                                 |
+| Sharpen / Pre-blur                        | Crisp up or soften the photo before conversion                                                                     |
+| Tone curve                                | Gamma from 40 to 220                                                                                               |
+| Midtones, shadow detail, highlight detail | Shape where the tones land                                                                                         |
+| White cleanup                             | Clears grey haze from light areas                                                                                  |
+
+</details>
+
+<details>
+<summary><b>Workspace</b></summary>
+
+- **Before / after:** show the original, the result, or a draggable split view (hold <kbd>B</kbd> to peek at the original)
+- **Zoom and pan** with mouse, trackpad or pinch, plus fit and 100 % buttons and a navigator overview
+- **Crop** freely or to 1:1, 4:5, 3:4 or 2:3, and restore the original any time
+- **Four workspace backgrounds:** cutting mat, navy, graphite or light grey, to judge your graphic on dark and light shirts
+- **Preview quality:** fast (1100 px), balanced (1800 px) or close to export (2800 px). Export always renders at full size.
+- **Look thumbnails** are rendered live from your own photo, so you see every look before you click it
+- **Your own looks:** save the current settings as a named look and load or delete it later
+- **Compare variants:** render 3, 4 or 6 variations (Balanced, Hard Poster, Detail Ink, Soft Halftone, Dirty Xerox, Shirt Ready) side by side and apply the one you like
+- **Undo and redo** for every change, and sidebars you can resize by dragging
+
+</details>
+
+## Export and upscaling
+
+| Option               | Result                                                                                         |
+| -------------------- | ---------------------------------------------------------------------------------------------- |
+| Current preview size | Fast export at the size you see                                                                |
+| 2× and 4× larger     | Upscaled export, rendered fresh at the new size so edges and dots stay crisp instead of blurry |
+| Original image size  | Full resolution of your photo                                                                  |
+| Custom width         | Anything from 256 to 8000 px, with quick buttons for 2048, 3000 and 4096 px                    |
+
+- **PNG** with white or transparent background, and an invert option for white-on-black prints
+- **SVG** vector file for plotters, cutters and further editing
+- **ZIP pack** with a transparent PNG, a version on black, a version on white, a print report and the settings as JSON
+- **Batch export:** open several photos at once and every one gets the current look, delivered as one ZIP
+- **Print check** before you export: resolution, print size at 300 DPI, transparency, black/white only, ink coverage, smallest island in mm and whether the motif touches the border, with tips when something looks risky for printing
 
 <p align="center">
-  <img src="docs/screenshots/desktop.png" alt="Bitmap Bananza auf dem Desktop" width="780" />
+  <img src="docs/screenshots/desktop.png" alt="Bitmap Bananza on desktop" width="780" />
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/suche.png" alt="Regler-Suche mit Strg K" width="520" />
+  <img src="docs/screenshots/suche.png" alt="Search every control with Ctrl K" width="520" />
   &nbsp;
-  <img src="docs/screenshots/mobile.png" alt="Bitmap Bananza auf dem Handy" width="200" />
+  <img src="docs/screenshots/mobile.png" alt="Bitmap Bananza on a phone" width="200" />
 </p>
 
-## Lokal starten
+## Run it locally
 
-Voraussetzung ist Node 22 (siehe `.nvmrc`).
+You need Node 22 (see `.nvmrc`).
 
 ```sh
 npm install
 npm run dev            # http://localhost:5173
 ```
 
-| Befehl                 | Was passiert                                 |
-| ---------------------- | -------------------------------------------- |
-| `npm run dev`          | Entwicklungsserver mit Hot Reload            |
-| `npm run build`        | Typecheck und Produktions-Build nach `dist/` |
-| `npm run preview`      | Den Build aus `dist/` lokal ausliefern       |
-| `npm run typecheck`    | Nur TypeScript prüfen                        |
-| `npm run format`       | Code mit Prettier formatieren                |
-| `npm run format:check` | Prüfen, ob alles formatiert ist              |
+| Command                | What it does                                |
+| ---------------------- | ------------------------------------------- |
+| `npm run dev`          | Development server with hot reload          |
+| `npm run build`        | Typecheck and production build into `dist/` |
+| `npm run preview`      | Serve the build from `dist/` locally        |
+| `npm run typecheck`    | Check TypeScript only                       |
+| `npm run format`       | Format the code with Prettier               |
+| `npm run format:check` | Check that everything is formatted          |
 
-## Aufbau
+## Project structure
 
 ```
 src/
-  engine/        Bild-Engine, unverändert aus dem ursprünglichen Ein-Datei-Tool übernommen
-    core.js      Pixel-Algorithmen
-    index.js     öffentliche API: renderGraphic, renderAtSize, Analyse, SVG
-    worker.js    rendert Vorschauen abseits des Haupt-Threads
-  lib/           Regler-Schema, Export, Dateien laden, gemeinsame Aktionen
-  state/         Zustand-Store (Regler, Verlauf, Ansicht, Werkzeuge), Renderer, Tastenkürzel
-  components/    Oberfläche: Looks, Regler, Bühne, Dock, Zuschnitt, Suche, Vergleich, Export
-public/          Favicon und Beispielbilder
-docs/            Logo, Screenshots und Beispielbilder für diese README
+  engine/        image engine, ported unchanged from the original single-file tool
+    core.js      pixel algorithms
+    index.js     public API: renderGraphic, renderAtSize, analysis, SVG
+    worker.js    renders previews off the main thread
+  lib/           control schema, export, file loading, shared actions
+  state/         Zustand store (controls, history, view, tools), renderer, shortcuts
+  components/    UI: looks, controls, stage, dock, crop, search, compare, export
+public/          favicon and sample photos
+docs/            logo, screenshots and example images for this README
 ```
 
-Jeder Regler ist genau einmal in `src/lib/controls.ts` definiert. Schieberegler, Suche, die „geändert“-Punkte und Zurücksetzen lesen alle von dort, ein neuer Regler braucht also nur einen Eintrag.
+Every control is defined once in `src/lib/controls.ts`. Sliders, search, the "changed" dots and reset all read from there, so a new control only needs one entry.
 
-Die Engine liefert für alle acht Looks pixelgleiche Ergebnisse zum Original-Tool, im Worker wie im Haupt-Thread. Pixel Bitmap rendert immer im Haupt-Thread, weil OffscreenCanvas minimal anders herunterskaliert.
+The engine produces pixel-identical results to the original tool for all eight looks, both in the worker and on the main thread. Pixel Bitmap always renders on the main thread because OffscreenCanvas downsamples slightly differently.
 
-## Tastenkürzel
+## Keyboard shortcuts
 
-| Tasten                 | Aktion                                         |
-| ---------------------- | ---------------------------------------------- |
-| Strg/⌘ K               | Regler oder Aktion suchen                      |
-| Strg/⌘ O               | Bild öffnen                                    |
-| Strg/⌘ S               | PNG exportieren                                |
-| Strg/⌘ Z, Strg/⌘ ⇧ Z   | Rückgängig, Wiederholen                        |
-| B (halten)             | Original zeigen                                |
-| S                      | Vorher/Nachher teilen                          |
-| F, 1, + / −            | Einpassen, 100 %, Zoom                         |
-| C, E, M                | Zuschneiden (Enter übernimmt), Radierer, Maske |
-| ?                      | Alle Tastenkürzel                              |
-| Doppelklick auf Regler | Regler zurücksetzen                            |
+| Keys                                                                  | Action                          |
+| --------------------------------------------------------------------- | ------------------------------- |
+| <kbd>Ctrl</kbd>/<kbd>⌘</kbd> <kbd>K</kbd>                             | Search any control or action    |
+| <kbd>Ctrl</kbd>/<kbd>⌘</kbd> <kbd>O</kbd>                             | Open image                      |
+| <kbd>Ctrl</kbd>/<kbd>⌘</kbd> <kbd>S</kbd>                             | Export PNG                      |
+| <kbd>Ctrl</kbd>/<kbd>⌘</kbd> <kbd>Z</kbd> / <kbd>⇧</kbd> <kbd>Z</kbd> | Undo / redo                     |
+| <kbd>B</kbd> (hold)                                                   | Show original                   |
+| <kbd>S</kbd>                                                          | Split before / after            |
+| <kbd>F</kbd>, <kbd>1</kbd>, <kbd>+</kbd> / <kbd>−</kbd>               | Fit, 100 %, zoom                |
+| <kbd>C</kbd>                                                          | Crop (<kbd>Enter</kbd> applies) |
+| <kbd>E</kbd>, <kbd>M</kbd>                                            | Eraser, mask preview            |
+| <kbd>?</kbd>                                                          | All shortcuts                   |
+| Double-click a slider                                                 | Reset it                        |
 
 ## Deployment
 
-Die Seite läuft auf Cloudflare Pages (Projekt `lbbstudio`). Jeder Push auf `main` wird automatisch gebaut.
+The site runs on Cloudflare Pages (project `lbbstudio`).
 
-- Build-Befehl: `npm run build`
-- Ausgabeordner: `dist` (steht auch in `wrangler.toml`)
+- Build command: `npm run build`
+- Output directory: `dist` (also set in `wrangler.toml`)
 
-Gebaut mit React, Vite, Tailwind CSS, Motion und Zustand.
+Built with React, Vite, Tailwind CSS, Motion and Zustand.
