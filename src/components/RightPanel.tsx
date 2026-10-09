@@ -96,8 +96,8 @@ function ExportSection() {
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-1.5">
-        <Button variant="line" className="text-[12.5px]" disabled={!hasImage || busy !== null} onClick={() => run('zip', exportPack)}>{busy === 'zip' ? 'Packe …' : 'Export-Paket (ZIP)'}</Button>
-        <Button variant="line" className="text-[12.5px]" disabled={!hasImage || busy !== null} onClick={() => run('svg', exportSVG)}>SVG-Vektor</Button>
+        <Button variant="line" className="text-[12.5px]" disabled={!hasImage || busy !== null} onClick={() => run('zip', exportPack)}>{busy === 'zip' ? 'Packe …' : 'ZIP-Paket'}</Button>
+        <Button variant="line" className="text-[12.5px]" disabled={!hasImage || busy !== null} onClick={() => run('svg', exportSVG)}>SVG</Button>
       </div>
       <Hint>Das Paket enthält PNG transparent, auf Schwarz und auf Weiß, Druckbericht und Einstellungen.</Hint>
     </Section>
@@ -201,58 +201,6 @@ function CropSection() {
   );
 }
 
-const LOOK_STORAGE = 'levisGraphicLabCustomPresetsV1';
-
-function readLooks(): Record<string, Record<string, unknown>> {
-  try { return JSON.parse(localStorage.getItem(LOOK_STORAGE) || '{}') || {}; } catch { return {}; }
-}
-
-function CustomLooksSection() {
-  const [looks, setLooks] = useState(readLooks);
-  const [name, setName] = useState('');
-  const [selected, setSelected] = useState('');
-  const notify = useStudio((s) => s.notify);
-  const names = Object.keys(looks);
-
-  const write = (next: Record<string, Record<string, unknown>>) => {
-    setLooks(next);
-    try { localStorage.setItem(LOOK_STORAGE, JSON.stringify(next)); } catch { notify('Speichern ist in diesem Browser blockiert.'); }
-  };
-
-  return (
-    <Section id="custom" title="Eigene Looks">
-      <label htmlFor="look-name" className={fieldLabel}>Name</label>
-      <input id="look-name" className="field" placeholder="z. B. Shirt Heavy Ink" value={name} onChange={(e) => setName(e.target.value)} />
-      <label htmlFor="look-select" className={fieldLabel}>Gespeichert</label>
-      <select id="look-select" className="field" value={selected} onChange={(e) => { setSelected(e.target.value); setName(e.target.value); }}>
-        {!names.length && <option value="">Noch keine eigenen Looks</option>}
-        {names.length > 0 && <option value="">Look wählen …</option>}
-        {names.map((n) => <option key={n} value={n}>{n}</option>)}
-      </select>
-      <div className="mt-2.5 grid grid-cols-3">
-        <Button variant="mini" className="rounded-r-none" onClick={() => {
-          const n = name.trim();
-          if (!n) { notify('Gib deinem Look zuerst einen Namen.'); document.getElementById('look-name')?.focus(); return; }
-          write({ ...looks, [n]: { ...useStudio.getState().controls } });
-          setSelected(n);
-          notify(`Look „${n}“ gespeichert.`);
-        }}>Speichern</Button>
-        <Button variant="mini" className="-ml-px rounded-none" disabled={!selected} onClick={() => {
-          useStudio.getState().setControls(controlsFromPreset(looks[selected]));
-          notify(`Look „${selected}“ geladen.`);
-        }}>Laden</Button>
-        <Button variant="mini" className="-ml-px rounded-l-none" disabled={!selected} onClick={() => {
-          const next = { ...looks };
-          delete next[selected];
-          write(next);
-          setSelected('');
-        }}>Löschen</Button>
-      </div>
-      <Hint>Wird in diesem Browser gespeichert.</Hint>
-    </Section>
-  );
-}
-
 function BatchSection() {
   const files = useStudio((s) => s.batchFiles);
   const [progress, setProgress] = useState<string | null>(null);
@@ -306,7 +254,6 @@ export function RightPanel() {
       <ExportSection />
       <VariantsSection />
       <CropSection />
-      <CustomLooksSection />
       <BatchSection />
       <PerformanceSection />
     </aside>

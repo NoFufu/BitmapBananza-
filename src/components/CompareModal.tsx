@@ -63,7 +63,7 @@ export function CompareModal({ title, left, right, leftLabel, rightLabel, onClos
         className="flex w-[min(1100px,100%)] flex-col gap-2.5 rounded-xl border border-ink bg-paper p-3"
       >
         <div className="flex items-center justify-between gap-2.5 px-1">
-          <strong className="text-[15px] font-extrabold font-semiwide">{title}</strong>
+          <strong className="text-[15px] font-extrabold font-compact">{title}</strong>
           <div className="flex gap-1.5">
             <Button variant="mini" className="!w-auto !border-ink !bg-ink !text-paper" onClick={onApply}>Variante übernehmen</Button>
             <Button variant="mini" className="!w-auto" onClick={onClose}>Schließen</Button>

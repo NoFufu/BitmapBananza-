@@ -8,7 +8,7 @@ import { TopBar } from './components/TopBar';
 import { Renderer } from './state/Renderer';
 import { useShortcuts } from './state/useShortcuts';
 
-const STORAGE = { left: 'levisBitmapBananzaLeftSidebarWidth', right: 'levisBitmapBananzaRightSidebarWidth' };
+const STORAGE = { left: 'levisBitmapBananzaLeftWidthV2', right: 'levisBitmapBananzaRightWidthV2' };
 
 function readWidth(key: string, fallback: number) {
   try {
@@ -49,10 +49,10 @@ function Resizer({ side, width, onChange }: { side: 'left' | 'right'; width: num
 export default function App() {
   useShortcuts();
   const compact = typeof window !== 'undefined' && window.innerWidth < 1200;
-  const [left, setLeft] = useState(() => readWidth(STORAGE.left, compact ? 280 : 320));
-  const [right, setRight] = useState(() => readWidth(STORAGE.right, compact ? 270 : 300));
+  const [left, setLeft] = useState(() => readWidth(STORAGE.left, compact ? 240 : 264));
+  const [right, setRight] = useState(() => readWidth(STORAGE.right, compact ? 236 : 252));
 
-  const clampWidth = (w: number) => Math.min(560, Math.max(240, w));
+  const clampWidth = (w: number) => Math.min(520, Math.max(220, w));
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE.left, String(Math.round(left)));

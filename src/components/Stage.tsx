@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { clamp, eraseOnCanvas } from '../engine';
 import { openFiles } from '../lib/files';
-import { processed, useStudio } from '../state/store';
+import { STAGE_BACKGROUNDS, processed, useStudio } from '../state/store';
 import { CropOverlay } from './CropOverlay';
 import { Dock } from './Dock';
 import { EmptyState } from './EmptyState';
@@ -68,6 +68,8 @@ export function Stage() {
   const pixel = useStudio((s) => s.controls.graphicMode === 'pixelBitmap');
   const revealId = useStudio((s) => s.revealId);
   const preview = useStudio((s) => s.preview);
+  const stageBg = useStudio((s) => s.stageBg);
+  const bg = STAGE_BACKGROUNDS.find((b) => b.value === stageBg) ?? STAGE_BACKGROUNDS[0];
 
   const draw = useCallback(() => {
     const out = canvasRef.current;
@@ -262,6 +264,13 @@ export function Stage() {
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
+      style={{
+        ['--stage-bg' as string]: bg.color,
+        ['--grid-strong' as string]: bg.light ? 'rgba(0,0,0,.12)' : 'rgba(255,255,255,.13)',
+        ['--grid-soft' as string]: bg.light ? 'rgba(0,0,0,.05)' : 'rgba(255,255,255,.06)',
+        ['--mark' as string]: bg.light ? 'rgba(0,0,0,.55)' : 'rgba(255,255,255,.7)',
+        ['--on-stage' as string]: bg.light ? 'rgba(0,0,0,.75)' : 'rgba(255,255,255,.85)'
+      }}
       onDragOver={onDragOver}
       onDragEnter={onDragOver}
       onDragLeave={onDragLeave}
@@ -293,9 +302,33 @@ export function Stage() {
       </motion.div>
       </div>
 
+      <StageBgPicker />
       <Dock />
       {hasCanvas && <Navigator />}
     </section>
+  );
+}
+
+/** Swatches for the work-area background, top left of the stage. */
+function StageBgPicker() {
+  const stageBg = useStudio((s) => s.stageBg);
+  const setStageBg = useStudio((s) => s.setStageBg);
+  return (
+    <div data-no-pan role="radiogroup" aria-label="Hintergrund der Arbeitsfläche" className="absolute top-3 left-3 z-[5] flex items-center gap-1.5 rounded-full bg-black/25 p-1.5 backdrop-blur-sm">
+      {STAGE_BACKGROUNDS.map((b) => (
+        <button
+          key={b.value}
+          type="button"
+          role="radio"
+          aria-checked={stageBg === b.value}
+          aria-label={b.label}
+          title={b.label}
+          onClick={() => setStageBg(b.value)}
+          className={cx('size-[18px] rounded-full border border-white/50 transition-transform hover:scale-110', stageBg === b.value && 'ring-2 ring-npb ring-offset-1 ring-offset-transparent')}
+          style={{ background: b.color }}
+        />
+      ))}
+    </div>
   );
 }
 

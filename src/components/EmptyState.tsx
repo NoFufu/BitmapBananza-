@@ -43,7 +43,7 @@ export function EmptyState({ dragOver, loading }: { dragOver: boolean; loading: 
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
-            className={`text-[26px] leading-[1.05] font-extrabold font-wide tracking-[-0.015em] group-hover:underline group-hover:decoration-2 group-hover:underline-offset-[5px] max-[900px]:text-[21px] ${dragOver ? 'text-npb-strong' : ''}`}
+            className={`text-[32px] leading-[1.05] font-extrabold font-compact tracking-[-0.01em] group-hover:underline group-hover:decoration-2 group-hover:underline-offset-[5px] max-[900px]:text-[21px] ${dragOver ? 'text-npb-strong' : ''}`}
           >
             {loading ? 'Bild wird vorbereitet …' : dragOver ? 'Loslassen zum Laden' : 'Foto hier ablegen'}
           </motion.span>
@@ -56,7 +56,7 @@ export function EmptyState({ dragOver, loading }: { dragOver: boolean; loading: 
         <button
           type="button"
           onClick={loadSampleImage}
-          className="absolute top-[calc(100%+40px)] left-1/2 -translate-x-1/2 whitespace-nowrap px-2.5 py-1.5 text-[13px] text-white/85 underline underline-offset-4 hover:text-white"
+          className="absolute top-[calc(100%+40px)] left-1/2 -translate-x-1/2 whitespace-nowrap px-2.5 py-1.5 text-[13px] text-[color:var(--on-stage)] underline underline-offset-4 hover:opacity-100"
         >
           Beispielbild ausprobieren
         </button>

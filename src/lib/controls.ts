@@ -1,12 +1,12 @@
 // One schema for every image control. Sliders, the command palette, the
 // "changed" markers and reset all read from here.
 
-export type SectionId = 'conversion' | 'photo' | 'halftone' | 'distress' | 'edge' | 'output';
+export type SectionId = 'basics' | 'structure' | 'wear' | 'edge' | 'cleanup' | 'pro' | 'output';
 
 export interface Option { value: string; label: string; group?: string }
 
-interface Base { key: string; label: string; section: SectionId; sub?: string }
-export interface SliderDef extends Base { kind: 'slider'; min: number; max: number; step?: number; unit?: string; tone?: boolean; showIf?: (c: Controls) => boolean }
+interface Base { key: string; label: string; section: SectionId; sub?: string; hint?: string; showIf?: (c: Controls) => boolean }
+export interface SliderDef extends Base { kind: 'slider'; min: number; max: number; step?: number; unit?: string; tone?: boolean }
 export interface SelectDef extends Base { kind: 'select'; options: Option[] }
 export interface ToggleDef extends Base { kind: 'toggle' }
 export type ControlDef = SliderDef | SelectDef | ToggleDef;
@@ -49,13 +49,50 @@ export function controlsFromPreset(preset: Record<string, unknown>): Controls {
   return next as Controls;
 }
 
-export const SECTIONS: { id: SectionId; title: string; hint?: string }[] = [
-  { id: 'conversion', title: 'Konvertierung', hint: 'Pixelgröße gibt es nur im Modus Pixel Bitmap Classic. Alle anderen Modi rendern ohne Pixelblöcke.' },
-  { id: 'photo', title: 'Foto-Feinschliff', hint: 'Wirkt vor Halftone, Distress und Maske. Adaptive Stärke greift nur bei adaptivem oder kantengestütztem Schwellenwert.' },
-  { id: 'halftone', title: 'Halftone', hint: 'Dot Gain macht Punkte fetter oder dünner. Jitter bricht das Raster auf.' },
-  { id: 'distress', title: 'Distress', hint: 'Ink Bleed lässt schwarze Flächen auslaufen, Staub stanzt Fehlstellen, Körnung legt feines Druckrauschen darüber.' },
-  { id: 'edge', title: 'Maske und Shirt-Kante' }
+/** Left panel, in the order a person usually works: overall tone, how grey is drawn, wear, edges, cleanup. */
+export const SECTIONS: { id: SectionId; title: string; subtitle: string; hint?: string }[] = [
+  { id: 'basics', title: 'Grundlagen', subtitle: 'Wie viel vom Bild wird schwarz?' },
+  { id: 'structure', title: 'Struktur', subtitle: 'Wie Grautöne gezeichnet werden' },
+  { id: 'wear', title: 'Druck-Look', subtitle: 'Abnutzung wie Siebdruck oder Kopierer' },
+  { id: 'edge', title: 'Rand und Shirt', subtitle: 'Bildrand ausblenden, radieren' },
+  { id: 'cleanup', title: 'Aufräumen', subtitle: 'Flecken, Löcher und Linienstärke', hint: 'Hilft vor allem bei Logos und Scans.' },
+  { id: 'pro', title: 'Profi-Einstellungen', subtitle: 'Feinsteuerung der Umwandlung', hint: 'Die Looks setzen diese Werte schon passend. Ändere sie nur, wenn Grundlagen nicht reichen.' }
 ];
+
+export type Structure = 'flat' | 'dither' | 'halftone' | 'pixel';
+
+/** What draws the grey tones right now. Halftone wins over dithering in the engine. */
+export function getStructure(c: Controls): Structure {
+  if (c.graphicMode === 'pixelBitmap') return 'pixel';
+  if (c.halftoneMode !== 'off' || c.graphicMode === 'screenprintHalftone') return 'halftone';
+  if (c.method !== 'threshold' && c.ditherStrength > 0) return 'dither';
+  return 'flat';
+}
+
+export function withStructure(c: Controls, structure: Structure): Controls {
+  const base = c.graphicMode === 'pixelBitmap' || c.graphicMode === 'screenprintHalftone' ? 'fullDetail' : c.graphicMode;
+  if (structure === 'pixel') return { ...c, graphicMode: 'pixelBitmap' };
+  if (structure === 'halftone') return { ...c, graphicMode: base, halftoneMode: c.halftoneMode === 'off' ? 'dotRound' : c.halftoneMode };
+  if (structure === 'dither') {
+    return { ...c, graphicMode: base, halftoneMode: 'off', method: c.method === 'threshold' ? 'floyd' : c.method, ditherStrength: c.ditherStrength > 0 ? c.ditherStrength : 100 };
+  }
+  return { ...c, graphicMode: base, halftoneMode: 'off', method: 'threshold' };
+}
+
+export const STRUCTURES: { value: Structure; label: string; hint: string }[] = [
+  { value: 'flat', label: 'Flächen', hint: 'Klare schwarze und weiße Flächen, ohne Raster.' },
+  { value: 'dither', label: 'Dither', hint: 'Grautöne als Punktmuster oder Rauschen.' },
+  { value: 'halftone', label: 'Raster', hint: 'Druckraster wie in Zeitung und Siebdruck.' },
+  { value: 'pixel', label: 'Pixel', hint: 'Grobe Pixelblöcke. Hier wirken nur Schwelle, Kontrast und Struktur.' }
+];
+
+// Dither methods that use the scale slider; the others ignore it.
+const SCALED_METHODS = new Set(['randomChunky', 'noise', 'blueNoise', 'organicWorm', 'maze', 'clusterDot', 'hatchH', 'hatchV', 'hatchDiag']);
+const notPixel = (c: Controls) => c.graphicMode !== 'pixelBitmap';
+const isDither = (c: Controls) => {
+  const st = getStructure(c);
+  return st === 'dither' || (st === 'pixel' && c.halftoneMode === 'off');
+};
 
 const methodOptions: Option[] = [
   { value: 'threshold', label: 'Hard Threshold', group: 'Clean' },
@@ -89,61 +126,62 @@ const methodOptions: Option[] = [
 const opts = (pairs: [string, string][]): Option[] => pairs.map(([value, label]) => ({ value, label }));
 
 export const CONTROL_DEFS: ControlDef[] = [
-  { kind: 'select', key: 'graphicMode', label: 'Grafikmodus', section: 'conversion', options: opts([
-    ['fullDetail', 'Full Detail Graphic'], ['simpleBW', 'Simple Black/White'], ['cleanCutout', 'Clean Cutout'], ['photoPoster', 'Photo Poster'],
-    ['highDetailInk', 'High Detail Ink'], ['screenprintHalftone', 'Screenprint Halftone'], ['dirtyXerox', 'Dirty Xerox'], ['pixelBitmap', 'Pixel Bitmap Classic']
-  ]) },
-  { kind: 'select', key: 'thresholdMode', label: 'Schwellenwert-Modus', section: 'conversion', options: opts([
-    ['global', 'Global'], ['auto', 'Automatisch (Otsu)'], ['adaptive', 'Adaptiv / lokal'], ['edge', 'Kantengestützt']
-  ]) },
-  { kind: 'slider', key: 'pixelSize', label: 'Pixelgröße', section: 'conversion', min: 1, max: 40, showIf: (c) => c.graphicMode === 'pixelBitmap' },
-  { kind: 'slider', key: 'threshold', label: 'Threshold', section: 'conversion', min: 0, max: 255, tone: true },
-  { kind: 'slider', key: 'contrast', label: 'Kontrast', section: 'conversion', min: -100, max: 100 },
-  { kind: 'slider', key: 'gamma', label: 'Tonwertkurve', section: 'conversion', min: 40, max: 220 },
-  { kind: 'select', key: 'method', label: 'Dithering', section: 'conversion', options: methodOptions },
-  { kind: 'slider', key: 'ditherStrength', label: 'Dither-Stärke', section: 'conversion', min: 0, max: 250 },
-  { kind: 'slider', key: 'noiseScale', label: 'Noise-Skalierung', section: 'conversion', min: 20, max: 300 },
+  { kind: 'slider', key: 'threshold', label: 'Schwelle', section: 'basics', min: 0, max: 255, tone: true, showIf: (c) => c.thresholdMode !== 'auto' },
+  { kind: 'slider', key: 'blackAmount', label: 'Schwarzanteil', section: 'basics', min: 0, max: 100, showIf: notPixel },
+  { kind: 'slider', key: 'contrast', label: 'Kontrast', section: 'basics', min: -100, max: 100 },
+  { kind: 'slider', key: 'detailPreserve', label: 'Details', section: 'basics', min: 0, max: 100, showIf: notPixel },
+  { kind: 'slider', key: 'smoothness', label: 'Glätten', section: 'basics', min: 0, max: 100, showIf: notPixel },
 
-  { kind: 'slider', key: 'blackAmount', label: 'Schwarzanteil', section: 'photo', min: 0, max: 100 },
-  { kind: 'slider', key: 'whiteCleanup', label: 'Weiß aufräumen', section: 'photo', min: 0, max: 100 },
-  { kind: 'slider', key: 'midtonePush', label: 'Mitteltöne', section: 'photo', min: -100, max: 100 },
-  { kind: 'slider', key: 'shadowDetail', label: 'Schattendetails', section: 'photo', min: 0, max: 100 },
-  { kind: 'slider', key: 'highlightDetail', label: 'Lichterdetails', section: 'photo', min: 0, max: 100 },
-  { kind: 'slider', key: 'edgeStrength', label: 'Kantenstärke', section: 'photo', min: 0, max: 100 },
-  { kind: 'slider', key: 'smoothness', label: 'Glätten', section: 'photo', min: 0, max: 100 },
-  { kind: 'slider', key: 'sharpen', label: 'Schärfen', section: 'photo', min: 0, max: 100 },
-  { kind: 'slider', key: 'preBlur', label: 'Vorab weichzeichnen', section: 'photo', min: 0, max: 100 },
-  { kind: 'slider', key: 'adaptiveStrength', label: 'Adaptive Stärke', section: 'photo', min: 0, max: 100 },
-  { kind: 'slider', key: 'detailPreserve', label: 'Details erhalten', section: 'photo', min: 0, max: 100 },
-
-  { kind: 'select', key: 'halftoneMode', label: 'Raster', section: 'halftone', options: opts([
+  { kind: 'select', key: 'method', label: 'Dither-Art', section: 'structure', options: methodOptions, showIf: isDither },
+  { kind: 'slider', key: 'ditherStrength', label: 'Dither-Stärke', section: 'structure', min: 0, max: 250, showIf: (c) => isDither(c) && c.method !== 'threshold' },
+  { kind: 'slider', key: 'noiseScale', label: 'Körnigkeit', section: 'structure', min: 20, max: 300, showIf: (c) => isDither(c) && SCALED_METHODS.has(c.method) },
+  { kind: 'select', key: 'halftoneMode', label: 'Rasterform', section: 'structure', options: opts([
     ['off', 'Aus'], ['dotRound', 'Round Dots'], ['dotTiny', 'Tiny Newspaper Dots'], ['dotBig', 'Big Print Dots'], ['ellipse', 'Ellipse Dots'],
     ['line', 'Line Screen'], ['verticalLine', 'Vertical Lines'], ['diagonalLine', 'Diagonal Lines'], ['cross', 'Cross Hatch'], ['wave', 'Wave Lines'],
     ['square', 'Square Dots'], ['diamond', 'Diamond Dots'], ['ring', 'Ring Dots'], ['concentric', 'Concentric Rings'], ['plus', 'Plus Marks'],
     ['brick', 'Brick Pattern'], ['star', 'Star Dots']
-  ]) },
-  { kind: 'slider', key: 'halftoneSize', label: 'Rastergröße', section: 'halftone', min: 3, max: 50 },
-  { kind: 'slider', key: 'halftoneStrength', label: 'Stärke', section: 'halftone', min: 0, max: 100 },
-  { kind: 'slider', key: 'halftoneAngle', label: 'Winkel', section: 'halftone', min: 0, max: 180, unit: '°' },
-  { kind: 'slider', key: 'halftoneGain', label: 'Dot Gain', section: 'halftone', min: -50, max: 100 },
-  { kind: 'slider', key: 'halftoneJitter', label: 'Raster-Jitter', section: 'halftone', min: 0, max: 100 },
+  ]), showIf: (c) => getStructure(c) === 'halftone' || (getStructure(c) === 'pixel' && c.halftoneMode !== 'off') },
+  { kind: 'slider', key: 'halftoneSize', label: 'Rastergröße', section: 'structure', min: 3, max: 50, showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone' },
+  { kind: 'slider', key: 'halftoneAngle', label: 'Winkel', section: 'structure', min: 0, max: 180, unit: '°', showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone' },
+  { kind: 'slider', key: 'halftoneGain', label: 'Punkte dicker / dünner', section: 'structure', min: -50, max: 100, showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone' },
+  { kind: 'slider', key: 'halftoneJitter', label: 'Unruhe', section: 'structure', min: 0, max: 100, showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone' },
+  { kind: 'slider', key: 'halftoneStrength', label: 'Rasteranteil', section: 'structure', min: 0, max: 100, showIf: (c) => c.halftoneMode !== 'off' || getStructure(c) === 'halftone' },
+  { kind: 'slider', key: 'pixelSize', label: 'Pixelgröße', section: 'structure', min: 1, max: 40, showIf: (c) => c.graphicMode === 'pixelBitmap' },
 
-  { kind: 'slider', key: 'edgeRoughness', label: 'Gerissene Kanten', section: 'distress', min: 0, max: 100 },
-  { kind: 'slider', key: 'inkBleed', label: 'Ink Bleed', section: 'distress', min: 0, max: 6 },
-  { kind: 'slider', key: 'dustAmount', label: 'Staub / Aussetzer', section: 'distress', min: 0, max: 100 },
-  { kind: 'slider', key: 'grainAmount', label: 'Körnung', section: 'distress', min: 0, max: 100 },
+  { kind: 'slider', key: 'edgeRoughness', label: 'Ausgefranste Kanten', section: 'wear', min: 0, max: 100 },
+  { kind: 'slider', key: 'inkBleed', label: 'Farbe läuft aus', section: 'wear', min: 0, max: 6 },
+  { kind: 'slider', key: 'dustAmount', label: 'Staub und Fehlstellen', section: 'wear', min: 0, max: 100 },
+  { kind: 'slider', key: 'grainAmount', label: 'Körnung', section: 'wear', min: 0, max: 100 },
 
   { kind: 'select', key: 'edgeFadeMode', label: 'Randübergang', section: 'edge', options: opts([
-    ['off', 'Aus'], ['smooth', 'Smooth Fade'], ['torn', 'Torn / Ripped'], ['dissolve', 'Dust Dissolve'], ['burned', 'Burned / Xerox Edge'], ['grunge', 'Grunge Frame']
+    ['off', 'Aus'], ['smooth', 'Weich ausblenden'], ['torn', 'Gerissen'], ['dissolve', 'Zerbröselt'], ['burned', 'Verbrannt / Kopierer'], ['grunge', 'Grunge-Rahmen']
   ]) },
-  { kind: 'slider', key: 'edgeFadeWidth', label: 'Fade-Breite', section: 'edge', min: 0, max: 180 },
-  { kind: 'slider', key: 'edgeFadeStrength', label: 'Fade-Stärke', section: 'edge', min: 0, max: 100 },
-  { kind: 'slider', key: 'edgeFadeNoise', label: 'Rissigkeit', section: 'edge', min: 0, max: 100 },
-  { kind: 'slider', key: 'removeSpeckles', label: 'Inseln entfernen', section: 'edge', sub: 'Aufräumen', min: 0, max: 100 },
-  { kind: 'slider', key: 'fillHoles', label: 'Löcher schließen', section: 'edge', sub: 'Aufräumen', min: 0, max: 100 },
-  { kind: 'slider', key: 'expandBlack', label: 'Kante nachziehen', section: 'edge', sub: 'Aufräumen', min: 0, max: 5 },
-  { kind: 'slider', key: 'shrinkBlack', label: 'Kante zurücknehmen', section: 'edge', sub: 'Aufräumen', min: 0, max: 5 },
-  { kind: 'slider', key: 'smoothJagged', label: 'Treppenstufen glätten', section: 'edge', sub: 'Aufräumen', min: 0, max: 100 },
+  { kind: 'slider', key: 'edgeFadeWidth', label: 'Breite', section: 'edge', min: 0, max: 180, showIf: (c) => c.edgeFadeMode !== 'off' },
+  { kind: 'slider', key: 'edgeFadeStrength', label: 'Stärke', section: 'edge', min: 0, max: 100, showIf: (c) => c.edgeFadeMode !== 'off' },
+  { kind: 'slider', key: 'edgeFadeNoise', label: 'Rissigkeit', section: 'edge', min: 0, max: 100, showIf: (c) => c.edgeFadeMode !== 'off' },
+
+  { kind: 'slider', key: 'removeSpeckles', label: 'Kleine Flecken entfernen', section: 'cleanup', min: 0, max: 100 },
+  { kind: 'slider', key: 'fillHoles', label: 'Löcher füllen', section: 'cleanup', min: 0, max: 100 },
+  { kind: 'slider', key: 'expandBlack', label: 'Linien dicker', section: 'cleanup', min: 0, max: 5 },
+  { kind: 'slider', key: 'shrinkBlack', label: 'Linien dünner', section: 'cleanup', min: 0, max: 5 },
+  { kind: 'slider', key: 'smoothJagged', label: 'Treppenkanten glätten', section: 'cleanup', min: 0, max: 100 },
+
+  { kind: 'select', key: 'thresholdMode', label: 'Schwellen-Methode', section: 'pro', options: opts([
+    ['global', 'Fest (Regler Schwelle)'], ['auto', 'Automatisch (Otsu)'], ['adaptive', 'Lokal, je Bildbereich'], ['edge', 'Lokal mit Kanten']
+  ]), showIf: notPixel },
+  { kind: 'slider', key: 'adaptiveStrength', label: 'Lokale Stärke', section: 'pro', min: 0, max: 100, showIf: (c) => notPixel(c) && (c.thresholdMode === 'adaptive' || c.thresholdMode === 'edge') },
+  { kind: 'slider', key: 'edgeStrength', label: 'Konturen betonen', section: 'pro', min: 0, max: 100, showIf: notPixel },
+  { kind: 'slider', key: 'sharpen', label: 'Schärfen', section: 'pro', min: 0, max: 100, showIf: notPixel },
+  { kind: 'slider', key: 'preBlur', label: 'Vorab weichzeichnen', section: 'pro', min: 0, max: 100, showIf: notPixel },
+  { kind: 'slider', key: 'gamma', label: 'Tonwertkurve', section: 'pro', min: 40, max: 220 },
+  { kind: 'slider', key: 'midtonePush', label: 'Mitteltöne', section: 'pro', min: -100, max: 100, showIf: notPixel },
+  { kind: 'slider', key: 'shadowDetail', label: 'Schattendetails', section: 'pro', min: 0, max: 100, showIf: notPixel },
+  { kind: 'slider', key: 'highlightDetail', label: 'Lichterdetails', section: 'pro', min: 0, max: 100, showIf: notPixel },
+  { kind: 'slider', key: 'whiteCleanup', label: 'Weiß aufräumen', section: 'pro', min: 0, max: 100, showIf: notPixel },
+  { kind: 'select', key: 'graphicMode', label: 'Verarbeitung', section: 'pro', hint: 'Clean Cutout und Photo Poster glätten Flächen stärker. Simple setzt fast alle Effekte aus.', options: opts([
+    ['fullDetail', 'Standard'], ['simpleBW', 'Simple Schwarz/Weiß'], ['cleanCutout', 'Clean Cutout'], ['photoPoster', 'Photo Poster'],
+    ['highDetailInk', 'High Detail Ink'], ['screenprintHalftone', 'Screenprint Halftone'], ['dirtyXerox', 'Dirty Xerox'], ['pixelBitmap', 'Pixel Bitmap']
+  ]) },
 
   { kind: 'toggle', key: 'transparent', label: 'Weiß transparent', section: 'output' },
   { kind: 'toggle', key: 'invert', label: 'Invertieren', section: 'output' }

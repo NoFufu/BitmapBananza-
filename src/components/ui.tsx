@@ -36,16 +36,17 @@ export function IconButton({ label, className, children, ...rest }: ButtonHTMLAt
 }
 
 /** Segmented control whose active pill slides between options (Aceternity "Animated Tabs"). */
-export function Segmented<T extends string>({ id, value, options, onChange, disabled, size = 'md' }: {
+export function Segmented<T extends string>({ id, value, options, onChange, disabled, size = 'md', stretch }: {
   id: string;
   value: T;
   options: { value: T; label: ReactNode; title?: string }[];
   onChange: (v: T) => void;
   disabled?: boolean;
   size?: 'sm' | 'md';
+  stretch?: boolean;
 }) {
   return (
-    <div role="radiogroup" className="relative flex items-center gap-0.5">
+    <div role="radiogroup" className={cx('relative flex items-center gap-0.5', stretch && '[&>button]:flex-1')}>
       {options.map((o) => {
         const active = o.value === value;
         return (

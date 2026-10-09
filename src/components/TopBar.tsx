@@ -9,25 +9,6 @@ import { Button, IconButton } from './ui';
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 export const MOD = isMac ? '⌘' : 'Strg';
 
-function Wedge() {
-  return (
-    <svg viewBox="0 0 20 36" className="h-8 w-[18px] fill-current" aria-hidden>
-      <defs>
-        <pattern id="w-a" width="2" height="2" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".45" /></pattern>
-        <pattern id="w-b" width="2" height="2" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" /></pattern>
-        <pattern id="w-c" width="2" height="2" patternUnits="userSpaceOnUse"><rect width="2" height="2" /><circle cx="1" cy="1" r=".6" fill="#fff" /></pattern>
-      </defs>
-      <rect x=".5" y=".5" width="19" height="3" fill="none" stroke="currentColor" />
-      <rect x=".5" y="5.5" width="19" height="3" fill="none" stroke="currentColor" />
-      <rect y="10" width="20" height="4" fill="url(#w-a)" />
-      <rect y="15" width="20" height="4" fill="url(#w-b)" />
-      <rect y="20" width="20" height="4" fill="url(#w-c)" />
-      <rect y="25" width="20" height="4" />
-      <rect y="30" width="20" height="5" />
-    </svg>
-  );
-}
-
 /** Export button that shows its own progress and success. */
 export function ExportButton() {
   const hasImage = useStudio((s) => Boolean(s.image && s.renderVersion));
@@ -68,9 +49,8 @@ export function TopBar() {
 
   return (
     <header className="flex h-14 min-w-0 items-center gap-4 border-b border-ink bg-paper pr-3 pl-4 max-[900px]:sticky max-[900px]:top-0 max-[900px]:z-30 max-[900px]:h-[52px] max-[900px]:gap-2 max-[900px]:pr-2 max-[900px]:pl-3">
-      <a href="./" className="flex shrink-0 items-center gap-2.5 text-ink no-underline" aria-label="Levi's Bitmap Bananza, neu laden">
-        <Wedge />
-        <span className="text-[17px] font-extrabold whitespace-nowrap font-wide tracking-[-0.01em] max-[900px]:text-[15px] max-[520px]:hidden">Levi's Bitmap Bananza</span>
+      <a href="./" className="shrink-0 text-ink no-underline" aria-label="Levi's Bitmap Bananza, neu laden">
+        <span className="block text-[21px] leading-none font-black whitespace-nowrap uppercase font-compact tracking-[-0.005em] [word-spacing:0.12em] max-[900px]:text-[18px] max-[380px]:text-[15px]">Levi's Bitmap Bananza</span>
       </a>
 
       {image && (
