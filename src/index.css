@@ -45,18 +45,19 @@
   }
 }
 
-@utility font-wide { font-stretch: 116%; }
-@utility font-semiwide { font-stretch: 110%; }
+/* Compact, condensed cut of Archivo for headings and the wordmark. */
+@utility font-compact { font-stretch: 72%; }
+@utility font-tight { font-stretch: 88%; }
 @utility tabular { font-variant-numeric: tabular-nums; }
 
 /* Cutting mat: fine 24px grid with a stronger 120px grid. */
 @utility mat {
-  background-color: var(--color-mat);
+  background-color: var(--stage-bg, var(--color-mat));
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.13) 1px, transparent 1px),
-    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    linear-gradient(var(--grid-strong, rgba(255, 255, 255, 0.13)) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-strong, rgba(255, 255, 255, 0.13)) 1px, transparent 1px),
+    linear-gradient(var(--grid-soft, rgba(255, 255, 255, 0.06)) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-soft, rgba(255, 255, 255, 0.06)) 1px, transparent 1px);
   background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
   background-position: center;
 }
@@ -72,7 +73,7 @@
 
 /* Crop marks at the four corners of the sheet. */
 @utility crop-marks {
-  --m: rgba(255, 255, 255, 0.7);
+  --m: var(--mark, rgba(255, 255, 255, 0.7));
   background:
     linear-gradient(var(--m), var(--m)) 0 12px / 10px 1px,
     linear-gradient(var(--m), var(--m)) 12px 0 / 1px 10px,

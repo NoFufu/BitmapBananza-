@@ -7,6 +7,23 @@ export type Tool = 'none' | 'crop' | 'eraser';
 export type ExportMode = 'current' | '2x' | '4x' | 'original' | 'custom';
 export type PreviewQuality = 'fast' | 'balanced' | 'exportNear';
 export interface CropRect { x: number; y: number; w: number; h: number }
+export type StageBg = 'mat' | 'navy' | 'graphite' | 'light';
+
+/** Work-area backgrounds. The grid stays the same, only the base colour changes. */
+export const STAGE_BACKGROUNDS: { value: StageBg; label: string; color: string; light?: boolean }[] = [
+  { value: 'mat', label: 'Schneidematte', color: '#33493f' },
+  { value: 'navy', label: 'Dunkelblau', color: '#1b2638' },
+  { value: 'graphite', label: 'Dunkelgrau', color: '#2a2c30' },
+  { value: 'light', label: 'Hellgrau', color: '#cfd0cc', light: true }
+];
+
+const BG_STORAGE = 'levisBitmapBananzaStageBg';
+function readStageBg(): StageBg {
+  try {
+    const v = localStorage.getItem(BG_STORAGE) as StageBg | null;
+    return STAGE_BACKGROUNDS.some((b) => b.value === v) ? (v as StageBg) : 'mat';
+  } catch { return 'mat'; }
+}
 
 export interface LoadedImage {
   full: CanvasSource;
@@ -55,6 +72,7 @@ interface StudioState {
   panX: number;
   panY: number;
   fitRequest: number;
+  stageBg: StageBg;
 
   tool: Tool;
   eraserSize: number;
@@ -90,6 +108,7 @@ interface StudioState {
   setRendered: (canvas: HTMLCanvasElement) => void;
 
   setView: (patch: Partial<Pick<StudioState, 'viewMode' | 'split' | 'maskPreview' | 'zoom' | 'panX' | 'panY'>>) => void;
+  setStageBg: (bg: StageBg) => void;
   requestFit: () => void;
   setTool: (tool: Tool) => void;
   set: (patch: Partial<StudioState>) => void;
@@ -122,6 +141,7 @@ export const useStudio = create<StudioState>((set, get) => ({
   panX: 0,
   panY: 0,
   fitRequest: 0,
+  stageBg: readStageBg(),
 
   tool: 'none',
   eraserSize: 34,
@@ -135,7 +155,7 @@ export const useStudio = create<StudioState>((set, get) => ({
   useWorker: true,
   batchFiles: [],
 
-  openSections: { conversion: true, export: true },
+  openSections: { basics: true, structure: true, export: true },
   paletteOpen: false,
   shortcutsOpen: false,
   toast: null,
@@ -238,6 +258,10 @@ export const useStudio = create<StudioState>((set, get) => ({
   },
 
   setView: (patch) => set(patch),
+  setStageBg: (bg) => {
+    try { localStorage.setItem(BG_STORAGE, bg); } catch { /* not remembered */ }
+    set({ stageBg: bg });
+  },
   requestFit: () => set((s) => ({ fitRequest: s.fitRequest + 1 })),
   setTool: (tool) => set((s) => ({ tool, cropRect: tool === 'crop' ? (s.cropRect ?? { x: 0.1, y: 0.1, w: 0.8, h: 0.8 }) : s.cropRect })),
   set: (patch) => set(patch),

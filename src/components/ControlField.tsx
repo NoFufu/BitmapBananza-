@@ -60,10 +60,8 @@ export function ControlField({ def }: { def: ControlDef }) {
   const setControl = useStudio((s) => s.setControl);
   const commit = useStudio((s) => s.commit);
 
-  if (def.kind === 'slider') {
-    if (def.showIf && !def.showIf(controls)) return null;
-    return <Slider def={def} />;
-  }
+  if (def.showIf && !def.showIf(controls)) return null;
+  if (def.kind === 'slider') return <Slider def={def} />;
 
   if (def.kind === 'select') {
     const groups = Array.from(new Set(def.options.map((o) => o.group).filter(Boolean))) as string[];
@@ -84,6 +82,7 @@ export function ControlField({ def }: { def: ControlDef }) {
             ))
             : def.options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
+        {def.hint && <p className="mt-1.5 text-[11.5px] leading-snug text-muted">{def.hint}</p>}
       </div>
     );
   }

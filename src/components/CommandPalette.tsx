@@ -2,10 +2,10 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Search } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { applyCrop, resetCrop, toggleMask, toggleSplit, toggleTool } from '../lib/actions';
-import { CONTROL_DEFS, LOOKS, SECTIONS, type ControlKey } from '../lib/controls';
+import { CONTROL_DEFS, LOOKS, SECTIONS, STRUCTURES, getStructure, withStructure, type ControlKey } from '../lib/controls';
 import { exportPack, exportPNG, exportSVG } from '../lib/exporter';
 import { loadSampleImage, pickFiles } from '../lib/files';
-import { useStudio } from '../state/store';
+import { STAGE_BACKGROUNDS, useStudio } from '../state/store';
 import { MOD } from './TopBar';
 
 interface Command {
@@ -65,7 +65,12 @@ function buildCommands(): Command[] {
     { id: 'shirt', label: 'Shirt-fertig machen', group: 'Werkzeug', enabled: hasImage, run: () => s().applyShirtReady() },
     { id: 'reset', label: 'Alle Regler zurücksetzen', group: 'Regler', enabled: always, run: () => s().resetControls() },
     { id: 'keys', label: 'Tastenkürzel anzeigen', group: 'Hilfe', keys: '?', enabled: always, run: () => s().set({ shortcutsOpen: true }) },
-    ...LOOKS.map((l) => ({ id: `look-${l.id}`, label: `Look: ${l.name}`, group: 'Looks', enabled: always, run: () => s().applyLook(l.id) }))
+    ...LOOKS.map((l) => ({ id: `look-${l.id}`, label: `Look: ${l.name}`, group: 'Looks', enabled: always, run: () => s().applyLook(l.id) })),
+    ...STRUCTURES.map((st) => ({
+      id: `structure-${st.value}`, label: `Struktur: ${st.label}`, group: 'Struktur', enabled: always,
+      run: () => { s().setControls(withStructure(s().controls, st.value)); s().toggleSection('structure', true); }
+    })),
+    ...STAGE_BACKGROUNDS.map((b) => ({ id: `bg-${b.value}`, label: `Hintergrund: ${b.label}`, group: 'Ansicht', enabled: always, run: () => s().setStageBg(b.value) }))
   ];
 
   for (const def of CONTROL_DEFS) {
@@ -76,7 +81,8 @@ function buildCommands(): Command[] {
       label: def.label,
       group,
       control: true,
-      enabled: always,
+      // Controls that have no effect in the current mode are hidden in the panel, so skip them here too.
+      enabled: () => !def.showIf || def.showIf(s().controls),
       value: () => {
         const v = s().controls[key];
         if (def.kind === 'toggle') return v ? 'an' : 'aus';
@@ -93,7 +99,13 @@ function buildCommands(): Command[] {
           group,
           minQuery: 2,
           enabled: always,
-          run: () => { s().setControls({ ...s().controls, [key]: option.value }); revealControl(key, false); }
+          run: () => {
+            let next = { ...s().controls, [key]: option.value };
+            // Picking a dither type should make dithering visible, not stay hidden behind halftone.
+            if (key === 'method' && getStructure(next) !== 'pixel') next = withStructure(next, option.value === 'threshold' ? 'flat' : 'dither');
+            s().setControls(next);
+            revealControl(key, false);
+          }
         });
       }
     }
